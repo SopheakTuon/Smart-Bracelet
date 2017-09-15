@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "D:\\PathMazingWorkspace\\Smart-Bracelet\\Application\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi\\ic_launcher.png",
+        "source": "D:\\PathMazingWorkspace\\Smart-Bracelet\\Application\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\PathMazingWorkspace\\SmartBand\\Application\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi\\ic_launcher.png",
+        "source": "D:\\PathMazingWorkspace\\SmartBand\\Application\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
+    }
+]

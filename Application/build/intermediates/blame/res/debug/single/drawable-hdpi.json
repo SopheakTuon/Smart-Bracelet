@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "D:\\PathMazingWorkspace\\SmartBand\\Application\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\tile.9.png",
+        "source": "D:\\PathMazingWorkspace\\SmartBand\\Application\\src\\main\\res\\drawable-hdpi\\tile.9.png"
+    },
+    {
+        "merged": "D:\\PathMazingWorkspace\\SmartBand\\Application\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_launcher.png",
+        "source": "D:\\PathMazingWorkspace\\SmartBand\\Application\\src\\main\\res\\drawable-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\PathMazingWorkspace\\Smart-Bracelet\\Application\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\tile.9.png",
+        "source": "D:\\PathMazingWorkspace\\Smart-Bracelet\\Application\\src\\main\\res\\drawable-hdpi\\tile.9.png"
+    },
+    {
+        "merged": "D:\\PathMazingWorkspace\\Smart-Bracelet\\Application\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi\\ic_launcher.png",
+        "source": "D:\\PathMazingWorkspace\\Smart-Bracelet\\Application\\src\\main\\res\\drawable-hdpi\\ic_launcher.png"
+    }
+]
