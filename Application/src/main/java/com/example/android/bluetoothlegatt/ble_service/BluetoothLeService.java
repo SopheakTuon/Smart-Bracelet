@@ -119,6 +119,7 @@ public class BluetoothLeService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        sInBluetoothLeService = this;
         if (this.dataFromActivityReceiver == null) {
             this.dataFromActivityReceiver = new DataFromActivityReceiver();
             LocalBroadcastManager.getInstance(this).registerReceiver(this.dataFromActivityReceiver, makeGattUpdateIntentFilter());
@@ -697,18 +698,12 @@ public class BluetoothLeService extends Service {
         return status;
     }
 
-    /**
-     * Enables or disables notification on a give characteristic.
-     *
-     * @param characteristic Characteristic to act on.
-     * @param enabled        If true, enable notification.  False otherwise.
-     */
-    public boolean setCharacteristicNotification(BluetoothGattCharacteristic characteristic,
-                                                 boolean enabled) {
-        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "BluetoothAdapter not initialized");
-            return false;
-        }
+//    public boolean setCharacteristicNotification(BluetoothGattCharacteristic characteristic,
+//                                                 boolean enabled) {
+//        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
+//            Log.w(TAG, "BluetoothAdapter not initialized");
+//            return false;
+//        }
         // This is specific to Heart Rate Measurement.
 //        if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
 //            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(
@@ -726,8 +721,8 @@ public class BluetoothLeService extends Service {
 //            }
 //        }
 
-        return mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
-    }
+//        return mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
+//    }
 
     public BluetoothGattCharacteristic getBluetoothGattCharacteristic(String serviceUUID, String charUUID) {
         if (mBluetoothGatt == null) {
@@ -735,4 +730,100 @@ public class BluetoothLeService extends Service {
         }
         return mBluetoothGatt.getService(UUID.fromString(serviceUUID)).getCharacteristic(UUID.fromString(charUUID));
     }
+
+
+
+    public boolean setCharacteristicNotification(BluetoothGattCharacteristic characteristic, boolean enabled) {
+        if (this.mBluetoothAdapter == null || this.mBluetoothGatt == null) {
+            return false;
+        }
+        boolean isNotify = this.mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
+        List<BluetoothGattDescriptor> descriptors = characteristic.getDescriptors();
+        if (descriptors == null || descriptors.isEmpty()) {
+            return isNotify;
+        }
+        for (int i = 0; i < descriptors.size(); i++) {
+            BluetoothGattDescriptor lastDescriptor = descriptors.get(i);
+            if (enabled) {
+                lastDescriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+            } else {
+                lastDescriptor.setValue(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
+            }
+            this.mBluetoothGatt.writeDescriptor(lastDescriptor);
+        }
+        return isNotify;
+    }
+
+    public void setBLENotify(BluetoothGatt gatt, boolean isOpenFFF0, boolean isOpen2a37) {
+        if (gatt == null) {
+            BluetoothLeService serviceMain = getInstance();
+            if (serviceMain == null) {
+//                Log.e(TAGBLE, "writeDelayValue  e1");
+                return;
+            }
+            gatt = serviceMain.getBluetoothGatt();
+            if (gatt == null) {
+//                Log.e(TAGBLE, "writeDelayValue  e2");
+                return;
+            }
+        }
+//        Log.e(TAGBLE, "setBLENotify  -bdoChecked; BluetoothAdapter.getDefaultAdapter().isEnabled()= " + BluetoothAdapter.getDefaultAdapter().isEnabled());
+        if (BluetoothAdapter.getDefaultAdapter().isEnabled()) {
+            BluetoothGattService main = gatt.getService(DeviceConfig.MAIN_SERVICE_UUID);
+//            Log.e(TAGBLE, "onBLEServiceFound doChecked main=" + main);
+            if (main != null) {
+                try {
+                    BluetoothGattCharacteristic characteristic = main.getCharacteristic(DeviceConfig.UUID_CHARACTERISTIC_NOTIFY);
+//                    printCharacteristicProperty(characteristic);
+                    getInstance().setCharacteristicNotification(characteristic, isOpenFFF0);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e2) {
+                e2.printStackTrace();
+            }
+            BluetoothGattService hrate = gatt.getService(DeviceConfig.HEARTRATE_SERVICE_UUID);
+//            Log.e(TAGBLE, "onBLEServiceFound doChecked hrate=" + hrate);
+            if (hrate != null) {
+                getInstance().setCharacteristicNotification(hrate.getCharacteristic(DeviceConfig.HEARTRATE_FOR_TIRED_NOTIFY), isOpen2a37);
+            }
+            try {
+                Thread.sleep(300);
+                return;
+            } catch (InterruptedException e22) {
+                e22.printStackTrace();
+                return;
+            }
+        }
+//        Log.e(TAGBLE, "have  found service, but bt have disabled  doChecked");
+    }
+
+//    private void notifyAndSendBrocast(List<BluetoothGattService> list, final BluetoothGatt gatt, LocalDeviceEntity device) {
+//        if (!(list == null || getInstance() == null || !getInstance().isConnectedDevice())) {
+//            this.blueHandler.post(new Runnable() {
+//                public void run() {
+//                    BluetoothLeService.this.setBLENotify(gatt, true, true);
+//                }
+//            });
+//        }
+//        Intent intent = new Intent();
+//        intent.putExtra("DEVICE_OK_INFO", device);
+//        intent.setAction(DeviceConfig.DEVICE_CONNECTE_AND_NOTIFY_SUCESSFUL);
+//        getApplicationContext().sendBroadcast(intent);
+//    }
+
+    private static BluetoothLeService sInBluetoothLeService;
+    public static synchronized BluetoothLeService getInstance() {
+        BluetoothLeService bluetoothLeService;
+        synchronized (BluetoothLeService.class) {
+            bluetoothLeService = sInBluetoothLeService;
+        }
+        return bluetoothLeService;
+    }
+
+
+
 }

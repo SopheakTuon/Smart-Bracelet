@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Fri Sep 15 08:53:17 ICT 2017
+#Fri Sep 15 11:03:10 ICT 2017
 14.set=ANDROID_RESOURCE
 180.file=D\:\\PathMazingWorkspace\\Smart-Bracelet\\Application\\build\\intermediates\\res\\resources-debug.ap_\\AndroidManifest.xml
 118.set=ANDROID_RESOURCE

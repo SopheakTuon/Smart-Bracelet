@@ -433,18 +433,18 @@ public class DeviceControlActivity extends Activity {
             List<BluetoothGattCharacteristic> gattCharacteristics = gattService.getCharacteristics();
             ArrayList<BluetoothGattCharacteristic> charas = new ArrayList<>();
 
-//            String stringChar = "Service UUID  = " + uuid + "\n";
+            String stringChar = "Service UUID  = " + uuid + "\n";
             // Loops through available Characteristics.
             for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
                 charas.add(gattCharacteristic);
                 HashMap<String, String> currentCharaData = new HashMap<>();
                 uuid = gattCharacteristic.getUuid().toString();
-//                stringChar += uuid + "\n";
+                stringChar += uuid + "\n";
                 currentCharaData.put(LIST_NAME, SampleGattAttributes.lookup(uuid, unknownCharaString));
                 currentCharaData.put(LIST_UUID, uuid);
                 gattCharacteristicGroupData.add(currentCharaData);
             }
-//            Log.d("UUID", stringChar);
+            Log.d("UUID", stringChar);
             mGattCharacteristics.add(charas);
             gattCharacteristicData.add(gattCharacteristicGroupData);
         }

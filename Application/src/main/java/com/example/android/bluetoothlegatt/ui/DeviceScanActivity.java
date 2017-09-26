@@ -320,7 +320,7 @@ public class DeviceScanActivity extends ListActivity {
                         @Override
                         public void run() {
 //                            if (device.getName() != null && device.getName().startsWith("Helo")) {
-                            if (device.getName() != null && device.getName().startsWith("Health")) {
+                            if (device.getName() != null) {
                                 mLeDeviceListAdapter.addDevice(device);
                                 mLeDeviceListAdapter.notifyDataSetChanged();
 //                                printScanRecord(scanRecord);
