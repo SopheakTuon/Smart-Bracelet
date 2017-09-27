@@ -33,6 +33,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -176,6 +177,8 @@ public class BluetoothLeService extends Service {
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 enableTXNotification();
                 broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
+
+                BluetoothLeService.this.notifyAndSendBrocast(gatt.getServices(), gatt);
                 List<BluetoothGattService> services = gatt.getServices();
                 Log.i("onServicesDiscovered", services.toString());
             } else {
@@ -909,6 +912,18 @@ public class BluetoothLeService extends Service {
             bluetoothLeService = sInBluetoothLeService;
         }
         return bluetoothLeService;
+    }
+
+
+    private void notifyAndSendBrocast(List<BluetoothGattService> list, final BluetoothGatt gatt) {
+        if (!(list == null || getInstance() == null) ) {
+            Handler blueHandler = new Handler();
+            blueHandler.post(new Runnable() {
+                public void run() {
+                    BluetoothLeService.this.setBLENotify(gatt, true, true);
+                }
+            });
+        }
     }
 
 
