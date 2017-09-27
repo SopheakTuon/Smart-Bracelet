@@ -705,6 +705,8 @@ public class BluetoothLeService extends Service {
         }
     }
 
+
+
     @Deprecated
     public boolean setCharacteristicNotification(String serviceUUID, String characteristicUUID, boolean enabled) {
         if (this.mBluetoothAdapter == null || this.mBluetoothGatt == null) {
@@ -720,6 +722,67 @@ public class BluetoothLeService extends Service {
         }
         boolean status = this.mBluetoothGatt.setCharacteristicNotification(TxChar, enabled);
         return status;
+    }
+
+    public void writeDelayValue(byte[] value, BluetoothGattCharacteristic characteristic, WriteCallBack callback) {
+        if (this.mBluetoothGatt == null) {
+            if (callback != null) {
+                callback.onWrite(false);
+            }
+        } else if (characteristic != null) {
+            characteristic.setValue(value);
+            characteristic.setWriteType(1);
+            boolean already = this.mBluetoothGatt.writeCharacteristic(characteristic);
+            if (callback != null) {
+                callback.onWrite(already);
+            }
+        } else {
+            if (callback != null) {
+                callback.onWrite(false);
+            }
+        }
+    }
+
+    public void writeDelayValue(int value, int formatType, int offset, BluetoothGattCharacteristic characteristic, WriteCallBack callback) {
+        if (this.mBluetoothGatt == null) {
+            if (callback != null) {
+                callback.onWrite(false);
+            }
+        } else if (characteristic != null) {
+            boolean result = characteristic.setValue(value, formatType, offset);
+            boolean result2 = this.mBluetoothGatt.writeCharacteristic(characteristic);
+            if (callback != null) {
+                callback.onWrite(true);
+            }
+        } else {
+            if (callback != null) {
+                callback.onWrite(false);
+            }
+        }
+    }
+
+    private void WriteValue(final BluetoothGattCharacteristic characteristic, final WriteCallBack callback) {
+//        if (!isRunOnUIThread()) {
+//            this.mHandler.post(new Runnable() {
+//                public void run() {
+//                    BluetoothLeService.this.WriteValue(characteristic, callback);
+//                }
+//            });
+//        } else
+            if (this.mBluetoothGatt == null) {
+            if (callback != null) {
+                callback.onWrite(false);
+            }
+        } else if (characteristic != null) {
+            boolean result2 = this.mBluetoothGatt.writeCharacteristic(characteristic);
+            if (callback != null) {
+                callback.onWrite(true);
+            }
+        } else {
+            if (callback != null) {
+                callback.onWrite(false);
+            }
+        }
     }
 
 //    public boolean setCharacteristicNotification(BluetoothGattCharacteristic characteristic,
