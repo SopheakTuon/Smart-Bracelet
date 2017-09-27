@@ -1,17 +1,20 @@
 package com.example.android.bluetoothlegatt.util.command;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
 import android.content.Context;
 import android.os.Build;
 import android.support.v4.view.MotionEventCompat;
 import android.text.format.Time;
 import android.util.Log;
 
-import com.example.android.bluetoothlegatt.util.TimeUtils;
-import com.example.android.bluetoothlegatt.constant.Constants;
 import com.example.android.bluetoothlegatt.ble_service.BluetoothLeService;
+import com.example.android.bluetoothlegatt.ble_service.DeviceConfig;
+import com.example.android.bluetoothlegatt.constant.Constants;
 import com.example.android.bluetoothlegatt.util.PrefUtils;
+import com.example.android.bluetoothlegatt.util.TimeUtils;
 
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
@@ -550,6 +553,26 @@ public class WriteCommand {
             ex.printStackTrace();
         }
         return macSerial;
+    }
+
+
+    public static void realTimeHeartRateMonitor(BluetoothLeService bluetoothLeService, BluetoothGatt bluetoothGatt) {
+        byte[] bytes = new byte[7];
+        bytes[0] = 0x68;
+        bytes[1] = 0x6;
+        bytes[2] = 0x1;
+        bytes[3] = 0x0;
+        bytes[4] = 0x0;
+        bytes[5] = 0x6f;
+        bytes[6] = 0x16;
+        BluetoothGattService bluetoothGattService = bluetoothGatt.getService(DeviceConfig.HEARTRATE_SERVICE_UUID);
+        boolean writeStatus = false;
+        while (!writeStatus) {
+            writeStatus = bluetoothLeService.writeRXCharacteristic("0000180d-0000-1000-8000-00805f9b34fb", "00002a37-0000-1000-8000-00805f9b34fb", bytes);
+        }
+        if (writeStatus) {
+            bluetoothLeService.setCharacteristicNotification("0000180d-0000-1000-8000-00805f9b34fb", "00002a37-0000-1000-8000-00805f9b34fb", true);
+        }
     }
 
 }

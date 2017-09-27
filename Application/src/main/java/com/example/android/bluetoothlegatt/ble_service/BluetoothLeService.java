@@ -97,9 +97,9 @@ public class BluetoothLeService extends Service {
 
     static {
         CCCD = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
-        RX_SERVICE_UUID = UUID.fromString("6e400001-b5a3-f393-e0a9-e50e24dcca9e");
-        RX_CHAR_UUID = UUID.fromString("6e400002-b5a3-f393-e0a9-e50e24dcca9e");
-        TX_CHAR_UUID = UUID.fromString("6e400003-b5a3-f393-e0a9-e50e24dcca9e");
+        RX_SERVICE_UUID = UUID.fromString("0000fff0-0000-1000-8000-00805f9b34fb");
+        RX_CHAR_UUID = UUID.fromString("0000fff1-0000-1000-8000-00805f9b34fb");
+        TX_CHAR_UUID = UUID.fromString("0000fff2-0000-1000-8000-00805f9b34fb");
     }
 
     private int ble_status;
@@ -335,17 +335,12 @@ public class BluetoothLeService extends Service {
     public void enableTXNotification() {
         BluetoothGattService RxService = this.mBluetoothGatt.getService(RX_SERVICE_UUID);
         if (RxService == null) {
-//            showMessage("Rx service not found!");
-//            broadcastUpdate(BroadcastCommand.DEVICE_DOES_NOT_SUPPORT_UART);
             return;
         }
         BluetoothGattCharacteristic TxChar = RxService.getCharacteristic(TX_CHAR_UUID);
         if (TxChar == null) {
-//            showMessage("Tx charateristic not found!");
-//            broadcastUpdate(BroadcastCommand.DEVICE_DOES_NOT_SUPPORT_UART);
             return;
         }
-        Log.d("Moon", "-----  enbale tx -----");
         this.mBluetoothGatt.setCharacteristicNotification(TxChar, true);
         BluetoothGattDescriptor descriptor = TxChar.getDescriptor(CCCD);
         descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
@@ -682,6 +677,7 @@ public class BluetoothLeService extends Service {
         return false;
     }
 
+    @Deprecated
     public boolean setCharacteristicNotification(String serviceUUID, String characteristicUUID, boolean enabled) {
         if (this.mBluetoothAdapter == null || this.mBluetoothGatt == null) {
             return false;
