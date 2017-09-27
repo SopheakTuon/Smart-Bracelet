@@ -343,8 +343,10 @@ public class BluetoothLeService extends Service {
         }
         this.mBluetoothGatt.setCharacteristicNotification(TxChar, true);
         BluetoothGattDescriptor descriptor = TxChar.getDescriptor(CCCD);
-        descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-        this.mBluetoothGatt.writeDescriptor(descriptor);
+        if (descriptor != null) {
+            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+            this.mBluetoothGatt.writeDescriptor(descriptor);
+        }
     }
 
     /**
@@ -625,7 +627,6 @@ public class BluetoothLeService extends Service {
 
     @Deprecated
     public boolean writeRXCharacteristic(BluetoothGattCharacteristic bluetoothGattCharacteristic, byte[] value) {
-        BluetoothGattService RxService = null;
         if (this.mBluetoothGatt == null) {
             return false;
         }
@@ -706,7 +707,6 @@ public class BluetoothLeService extends Service {
     }
 
 
-
     @Deprecated
     public boolean setCharacteristicNotification(String serviceUUID, String characteristicUUID, boolean enabled) {
         if (this.mBluetoothAdapter == null || this.mBluetoothGatt == null) {
@@ -769,7 +769,7 @@ public class BluetoothLeService extends Service {
 //                }
 //            });
 //        } else
-            if (this.mBluetoothGatt == null) {
+        if (this.mBluetoothGatt == null) {
             if (callback != null) {
                 callback.onWrite(false);
             }

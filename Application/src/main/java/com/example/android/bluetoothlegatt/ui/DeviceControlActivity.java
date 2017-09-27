@@ -287,23 +287,28 @@ public class DeviceControlActivity extends Activity {
         buttonBP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startMeasureBP();
-                enableElements(false);
+//                startMeasureBP();
+//                enableElements(false);
             }
         });
 
         buttonSP02.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startMeasureSPO2();
-                enableElements(false);
+//                startMeasureSPO2();
+//                enableElements(false);
             }
         });
         buttonHeart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startMeasureHr();
-                enableElements(false);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+//                        startMeasureHr();
+//                        enableElements(false);
+                    }
+                });
             }
         });
         buttonBreathRate.setOnClickListener(new View.OnClickListener() {
@@ -477,7 +482,9 @@ public class DeviceControlActivity extends Activity {
         displayByteDate("Collecting data...");
         displayData("Collecting data...");
         enableElements(false);
-        mManager.realTimeAndOnceMeasure(10, 1);
+//        mManager.realTimeAndOnceMeasure(10, 1);
+//        WriteCommand.openHeartRateMonitor();
+//        WriteCommand.realTimeHeartRateMonitor();
         isMeasuring = true;
     }
 

@@ -1,7 +1,6 @@
 package com.example.android.bluetoothlegatt.util.command;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.Context;
@@ -556,22 +555,41 @@ public class WriteCommand {
     }
 
 
-    public static void realTimeHeartRateMonitor(BluetoothLeService bluetoothLeService, BluetoothGatt bluetoothGatt) {
+    public static void realTimeHeartRateMonitor() {
         byte[] bytes = new byte[7];
-        bytes[0] = 0x68;
-        bytes[1] = 0x6;
-        bytes[2] = 0x1;
-        bytes[3] = 0x0;
-        bytes[4] = 0x0;
-        bytes[5] = 0x6f;
-        bytes[6] = 0x16;
-        BluetoothGattService bluetoothGattService = bluetoothGatt.getService(DeviceConfig.HEARTRATE_SERVICE_UUID);
+        bytes[0] = (byte) 0x68;
+        bytes[1] = (byte) 0x06;
+        bytes[2] = (byte) 0x01;
+        bytes[3] = (byte) 0x00;
+        bytes[4] = (byte) 0x00;
+        bytes[5] = (byte) 0x6f;
+        bytes[6] = (byte) 0x16;
+        BluetoothGattService bluetoothGattServiceHeart = BluetoothLeService.getInstance().getBluetoothGatt().getService(DeviceConfig.HEARTRATE_SERVICE_UUID);
+        BluetoothGattCharacteristic bluetoothGattCharacteristic = bluetoothGattServiceHeart.getCharacteristic(DeviceConfig.HEARTRATE_FOR_TIRED_NOTIFY);
         boolean writeStatus = false;
         while (!writeStatus) {
-            writeStatus = bluetoothLeService.writeRXCharacteristic("0000180d-0000-1000-8000-00805f9b34fb", "00002a37-0000-1000-8000-00805f9b34fb", bytes);
+            writeStatus = BluetoothLeService.getInstance().writeRXCharacteristic(bluetoothGattCharacteristic, bytes);
+        }
+        BluetoothLeService.getInstance().setCharacteristicNotification(bluetoothGattCharacteristic, true);
+    }
+
+    public static void openHeartRateMonitor() {
+        byte[] bytes = new byte[7];
+        bytes[0] = 0x68;
+        bytes[1] = 0x06;
+        bytes[2] = 0x01;
+        bytes[3] = 0x00;
+        bytes[4] = 0x01;
+        bytes[5] = 0x70;
+        bytes[6] = 0x16;
+        BluetoothGattService bluetoothGattServiceHeart = BluetoothLeService.getInstance().getBluetoothGatt().getService(DeviceConfig.HEARTRATE_SERVICE_UUID);
+        BluetoothGattCharacteristic bluetoothGattCharacteristic = bluetoothGattServiceHeart.getCharacteristic(DeviceConfig.HEARTRATE_FOR_TIRED_NOTIFY);
+        boolean writeStatus = false;
+        while (!writeStatus) {
+            writeStatus = BluetoothLeService.getInstance().writeRXCharacteristic(bluetoothGattCharacteristic, bytes);
         }
         if (writeStatus) {
-            bluetoothLeService.setCharacteristicNotification("0000180d-0000-1000-8000-00805f9b34fb", "00002a37-0000-1000-8000-00805f9b34fb", true);
+            BluetoothLeService.getInstance().setCharacteristicNotification(bluetoothGattCharacteristic, true);
         }
     }
 
