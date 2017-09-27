@@ -677,6 +677,34 @@ public class BluetoothLeService extends Service {
         return false;
     }
 
+    public interface WriteCallBack {
+        void onWrite(boolean z);
+    }
+
+    public synchronized void writeCharacteristic(final BluetoothGattCharacteristic characteristic, final WriteCallBack callback) {
+//        if (!isRunOnUIThread()) {
+//            this.mHandler.post(new Runnable() {
+//                public void run() {
+//                    BluetoothLeService.this.writeCharacteristic(characteristic, callback);
+//                }
+//            });
+//        } else
+        if (this.mBluetoothGatt == null) {
+            if (callback != null) {
+                callback.onWrite(false);
+            }
+        } else if (characteristic != null) {
+            boolean result2 = this.mBluetoothGatt.writeCharacteristic(characteristic);
+            if (callback != null && result2) {
+                callback.onWrite(true);
+            }
+        } else {
+            if (callback != null) {
+                callback.onWrite(false);
+            }
+        }
+    }
+
     @Deprecated
     public boolean setCharacteristicNotification(String serviceUUID, String characteristicUUID, boolean enabled) {
         if (this.mBluetoothAdapter == null || this.mBluetoothGatt == null) {
@@ -700,7 +728,7 @@ public class BluetoothLeService extends Service {
 //            Log.w(TAG, "BluetoothAdapter not initialized");
 //            return false;
 //        }
-        // This is specific to Heart Rate Measurement.
+    // This is specific to Heart Rate Measurement.
 //        if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
 //            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(
 //                    UUID.fromString(SampleGattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
@@ -726,7 +754,6 @@ public class BluetoothLeService extends Service {
         }
         return mBluetoothGatt.getService(UUID.fromString(serviceUUID)).getCharacteristic(UUID.fromString(charUUID));
     }
-
 
 
     public boolean setCharacteristicNotification(BluetoothGattCharacteristic characteristic, boolean enabled) {
@@ -812,6 +839,7 @@ public class BluetoothLeService extends Service {
 //    }
 
     private static BluetoothLeService sInBluetoothLeService;
+
     public static synchronized BluetoothLeService getInstance() {
         BluetoothLeService bluetoothLeService;
         synchronized (BluetoothLeService.class) {
@@ -819,7 +847,6 @@ public class BluetoothLeService extends Service {
         }
         return bluetoothLeService;
     }
-
 
 
 }
