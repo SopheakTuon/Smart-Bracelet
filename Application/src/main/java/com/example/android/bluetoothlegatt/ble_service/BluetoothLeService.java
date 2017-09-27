@@ -35,6 +35,7 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -914,11 +915,11 @@ public class BluetoothLeService extends Service {
         return bluetoothLeService;
     }
 
-
+    private Handler blueHandler = new Handler(Looper.getMainLooper()) {
+    };
     private void notifyAndSendBrocast(List<BluetoothGattService> list, final BluetoothGatt gatt) {
         if (!(list == null || getInstance() == null) ) {
-            Handler blueHandler = new Handler();
-            blueHandler.post(new Runnable() {
+            this.blueHandler.post(new Runnable() {
                 public void run() {
                     BluetoothLeService.this.setBLENotify(gatt, true, true);
                 }
