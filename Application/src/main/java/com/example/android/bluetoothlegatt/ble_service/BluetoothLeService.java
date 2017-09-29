@@ -177,11 +177,13 @@ public class BluetoothLeService extends Service {
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
 //                enableTXNotification();
-                BluetoothLeService.this.notifyAndSendBrocast(gatt.getServices(), gatt);
                 broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
 
                 BluetoothLeService.this.notifyAndSendBrocast(gatt.getServices(), gatt);
                 List<BluetoothGattService> services = gatt.getServices();
+                if (services != null) {
+                    BluetoothLeService.this.notifyAndSendBrocast(gatt.getServices(), gatt);
+                }
                 Log.i("onServicesDiscovered", services.toString());
             } else {
                 Log.w(TAG, "onServicesDiscovered received: " + status);
@@ -918,8 +920,9 @@ public class BluetoothLeService extends Service {
 
     private Handler blueHandler = new Handler(Looper.getMainLooper()) {
     };
+
     private void notifyAndSendBrocast(List<BluetoothGattService> list, final BluetoothGatt gatt) {
-        if (!(list == null || getInstance() == null) ) {
+        if (!(list == null || getInstance() == null)) {
             this.blueHandler.post(new Runnable() {
                 public void run() {
                     BluetoothLeService.this.setBLENotify(gatt, true, true);
