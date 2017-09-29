@@ -176,7 +176,8 @@ public class BluetoothLeService extends Service {
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                enableTXNotification();
+//                enableTXNotification();
+                BluetoothLeService.this.notifyAndSendBrocast(gatt.getServices(), gatt);
                 broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
 
                 BluetoothLeService.this.notifyAndSendBrocast(gatt.getServices(), gatt);
