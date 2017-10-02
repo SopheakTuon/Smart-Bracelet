@@ -97,6 +97,8 @@ public class BluetoothLeService extends Service {
 
     public ArrayList<byte[]> data_queue;
 
+    private List<IServiceCallback> mServiceCallbacks = new ArrayList();
+
     static {
         CCCD = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
         RX_SERVICE_UUID = UUID.fromString("0000fff0-0000-1000-8000-00805f9b34fb");
@@ -931,5 +933,21 @@ public class BluetoothLeService extends Service {
         }
     }
 
+
+    public void addCallback(IServiceCallback callback) {
+        if (!this.mServiceCallbacks.contains(callback)) {
+            this.mServiceCallbacks.add(callback);
+        }
+    }
+
+    public void removeCallback(IServiceCallback callback) {
+        if (this.mServiceCallbacks.contains(callback)) {
+            this.mServiceCallbacks.remove(callback);
+        }
+    }
+
+    public void removeAllCallback() {
+        this.mServiceCallbacks.clear();
+    }
 
 }
