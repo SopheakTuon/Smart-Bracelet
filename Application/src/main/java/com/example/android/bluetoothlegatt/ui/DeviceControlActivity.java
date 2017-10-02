@@ -17,6 +17,7 @@
 package com.example.android.bluetoothlegatt.ui;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
@@ -41,10 +42,13 @@ import android.widget.TextView;
 
 import com.example.android.bluetoothlegatt.R;
 import com.example.android.bluetoothlegatt.SampleGattAttributes;
+import com.example.android.bluetoothlegatt.ble_service.BleGattHelperListener;
+import com.example.android.bluetoothlegatt.ble_service.BluetoothLeService;
+import com.example.android.bluetoothlegatt.ble_service.LocalDeviceEntity;
 import com.example.android.bluetoothlegatt.manager.CommandManager;
 import com.example.android.bluetoothlegatt.models.BroadcastData;
 import com.example.android.bluetoothlegatt.models.DataPacket;
-import com.example.android.bluetoothlegatt.ble_service.BluetoothLeService;
+import com.example.android.bluetoothlegatt.util.FormatUtils;
 import com.example.android.bluetoothlegatt.util.command.WriteCommand;
 
 import java.util.ArrayList;
@@ -560,6 +564,41 @@ public class DeviceControlActivity extends Activity {
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
         intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
         return intentFilter;
+    }
+
+    class gattHelperListener implements BleGattHelperListener {
+        gattHelperListener() {
+        }
+
+        public void onDeviceStateChangeUI(LocalDeviceEntity device, BluetoothGatt gatt, String uuid, final byte[] value) {
+            DeviceControlActivity.this.mHandler.post(new Runnable() {
+                public void run() {
+//                    Log.i(MainActivity.TAG, "上传的心率数据:" + FormatUtils.bytesToHexString(value) + "--" + Thread.currentThread().getName());
+//                    int liveHR = value[1] & 255;
+//                    if (liveHR == 0 || !MainActivity.this.currenDate.equals(MainActivity.this.getTodayDate())) {
+//                        MainActivity.this.showResult = "--";
+//                    } else {
+//                        MainActivity.this.showResult = String.valueOf(liveHR);
+//                    }
+//                    MainActivity.this.activFragment.updateHR(MainActivity.this.showResult);
+                }
+            });
+        }
+
+        public void onDeviceConnectedChangeUI(final LocalDeviceEntity device, boolean showToast, final boolean fromServer) {
+//            MainActivity.this.mHandler.post(new Runnable() {
+//                public void run() {
+//                    MainActivity.this.mResideMenuInfo.setBattery("X");
+//                    MainActivity.this.mResideMenuInfo.setConnectState(MainActivity.this.getString(C1560R.string.disconnected));
+//                    LocalDataSaveTool.getInstance(MainActivity.this.getApplicationContext()).writeSp(MyConfingInfo.HARD_VERSION, "");
+//                    Intent intent = new Intent();
+//                    intent.setAction(MyConfingInfo.ON_DEVICE_STATE_CHANGE);
+//                    intent.putExtra("DEVICE_OBJ", device);
+//                    intent.putExtra(MyConfingInfo.DISCONNECT_STATE, fromServer);
+//                    MainActivity.this.sendBroadcast(intent);
+//                }
+//            });
+        }
     }
 
 }
