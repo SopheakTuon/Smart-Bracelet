@@ -30,6 +30,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.Menu;
@@ -48,7 +49,6 @@ import com.example.android.bluetoothlegatt.ble_service.LocalDeviceEntity;
 import com.example.android.bluetoothlegatt.manager.CommandManager;
 import com.example.android.bluetoothlegatt.models.BroadcastData;
 import com.example.android.bluetoothlegatt.models.DataPacket;
-import com.example.android.bluetoothlegatt.util.FormatUtils;
 import com.example.android.bluetoothlegatt.util.command.WriteCommand;
 
 import java.util.ArrayList;
@@ -181,6 +181,7 @@ public class DeviceControlActivity extends Activity {
 
 
     };
+    private Handler mHandler = new Handler(Looper.getMainLooper());
 
     private void displayByteDate(BroadcastData broadcastData) {
         mByteData.setText(bytesToByteString(broadcastData.getReceives()));
