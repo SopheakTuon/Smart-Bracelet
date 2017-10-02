@@ -30,7 +30,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.Menu;
@@ -88,11 +88,112 @@ public class DeviceControlActivity extends Activity {
 
     private static int timeMeasure = 0;
 
-    private Handler handler = new Handler();
-
     private boolean isHR = false;
 
     CommandManager mManager;
+
+    private Handler mHandler = new GetDataHandler();
+
+    class GetDataHandler extends Handler {
+        GetDataHandler() {
+        }
+
+        public void handleMessage(Message msg) {
+//            GetEachHourTask task = new GetEachHourTask();
+            Integer[] numArr;
+            switch (msg.what) {
+                case 0:
+//                    MainActivity.this.synchronizeTime();
+//                    MainActivity.this.listenerOfDeviceUI();
+                    return;
+                case 1:
+//                    MainActivity.this.getHardVerwion();
+                    return;
+                case 2:
+//                    MainActivity.this.getAndShowBattary(msg);
+                    return;
+                case 3:
+//                    final int arg = msg.arg1;
+//                    if (!MainActivity.this.closeTheRequest && BluetoothLeService.getInstance() != null && BluetoothLeService.getInstance().isConnectedDevice()) {
+//                        BleDataForDayData.getDayDataInstance(MainActivity.this.getApplicationContext()).setOnDayDataListener(new DataSendCallback() {
+//                            public void sendSuccess(byte[] receveData) {
+//                                DayDataDealer dayDataDealer = new DayDataDealer(MainActivity.this, receveData);
+//                                if (MainActivity.this.conectState != null && MainActivity.this.conectState.getText().toString().equals(MainActivity.this.getString(C1560R.string.datasynchronize)) && MainActivity.this.conectState.getVisibility() == 0) {
+//                                    MainActivity.this.showConnectState(8);
+//                                }
+//                            }
+//
+//                            public void sendFailed() {
+//                                if (MainActivity.this.conectState != null && MainActivity.this.conectState.getText().toString().equals(MainActivity.this.getString(C1560R.string.datasynchronize)) && MainActivity.this.conectState.getVisibility() == 0) {
+//                                    MainActivity.this.showConnectState(9);
+//                                }
+//                            }
+//
+//                            public void sendFinished() {
+//                                if (MainActivity.this.state == 8 || MainActivity.this.state == 9) {
+//                                    MainActivity.this.showConnectState(10);
+//                                }
+//                                if (arg == 0) {
+//                                    Message msg = MainActivity.this.mHandler.obtainMessage();
+//                                    msg.what = 4;
+//                                    msg.arg1 = 0;
+//                                    MainActivity.this.mHandler.sendMessageDelayed(msg, 0);
+//                                }
+//                            }
+//                        });
+//                        BleDataForDayData.getDayDataInstance(MainActivity.this.getApplicationContext()).getDayData();
+//                        return;
+//                    }
+                    return;
+                case 4:
+//                    numArr = new Integer[]{Integer.valueOf(2), Integer.valueOf(msg.arg1)};
+//                    if (task instanceof AsyncTask) {
+//                        AsyncTaskInstrumentation.execute(task, numArr);
+//                        return;
+//                    } else {
+//                        task.execute(numArr);
+//                        return;
+//                    }
+                case 5:
+//                    numArr = new Integer[]{Integer.valueOf(1), Integer.valueOf(msg.arg1)};
+//                    if (task instanceof AsyncTask) {
+//                        AsyncTaskInstrumentation.execute(task, numArr);
+//                        return;
+//                    } else {
+//                        task.execute(numArr);
+//                        return;
+//                    }
+                case 6:
+//                    numArr = new Integer[]{Integer.valueOf(4), Integer.valueOf(0)};
+//                    if (task instanceof AsyncTask) {
+//                        AsyncTaskInstrumentation.execute(task, numArr);
+//                        return;
+//                    } else {
+//                        task.execute(numArr);
+//                        return;
+//                    }
+                case 9:
+//                    MainActivity.this.requestHrWarningData();
+//                    MainActivity.this.getCheckFrameData();
+                    return;
+                case 10:
+//                    MainActivity.this.getFatigueData();
+                    return;
+                case 11:
+//                    MainActivity.this.settingArges();
+//                    MainActivity.this.checkInfo();
+                    return;
+                case 12:
+//                    MainActivity.this.connectTheSaveDevice(true);
+                    return;
+                case 13:
+//                    MainActivity.this.setDeviceLangue();
+                    return;
+                default:
+                    return;
+            }
+        }
+    }
 
 
     // Code to manage Service lifecycle.
@@ -181,7 +282,6 @@ public class DeviceControlActivity extends Activity {
 
 
     };
-    private Handler mHandler = new Handler(Looper.getMainLooper());
 
     private void displayByteDate(BroadcastData broadcastData) {
         mByteData.setText(bytesToByteString(broadcastData.getReceives()));
