@@ -43,6 +43,7 @@ import android.widget.TextView;
 
 import com.example.android.bluetoothlegatt.R;
 import com.example.android.bluetoothlegatt.SampleGattAttributes;
+import com.example.android.bluetoothlegatt.ble_service.BleGattHelper;
 import com.example.android.bluetoothlegatt.ble_service.BleGattHelperListener;
 import com.example.android.bluetoothlegatt.ble_service.BluetoothLeService;
 import com.example.android.bluetoothlegatt.ble_service.LocalDeviceEntity;
@@ -93,6 +94,7 @@ public class DeviceControlActivity extends Activity {
     CommandManager mManager;
 
     private Handler mHandler = new GetDataHandler();
+    private String showResult;
 
     class GetDataHandler extends Handler {
         GetDataHandler() {
@@ -242,6 +244,7 @@ public class DeviceControlActivity extends Activity {
                 enableElements(false);
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface.
+                BluetoothLeService.getInstance().addCallback(BleGattHelper.getInstance(DeviceControlActivity.this.getApplicationContext(), new gattHelperListener()));
                 displayGattServices(mBluetoothLeService.getSupportedGattServices());
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 BroadcastData broadcastData = (BroadcastData) intent.getSerializableExtra(BroadcastData.keyword);
@@ -674,14 +677,13 @@ public class DeviceControlActivity extends Activity {
         public void onDeviceStateChangeUI(LocalDeviceEntity device, BluetoothGatt gatt, String uuid, final byte[] value) {
             DeviceControlActivity.this.mHandler.post(new Runnable() {
                 public void run() {
-//                    Log.i(MainActivity.TAG, "上传的心率数据:" + FormatUtils.bytesToHexString(value) + "--" + Thread.currentThread().getName());
-//                    int liveHR = value[1] & 255;
-//                    if (liveHR == 0 || !MainActivity.this.currenDate.equals(MainActivity.this.getTodayDate())) {
-//                        MainActivity.this.showResult = "--";
-//                    } else {
-//                        MainActivity.this.showResult = String.valueOf(liveHR);
-//                    }
-//                    MainActivity.this.activFragment.updateHR(MainActivity.this.showResult);
+                    int liveHR = value[1] & 255;
+                    if (liveHR == 0) {
+                        DeviceControlActivity.this.showResult = "--";
+                    } else {
+                        DeviceControlActivity.this.showResult = String.valueOf(liveHR);
+                    }
+                    displayData("HR : " + showResult);
                 }
             });
         }

@@ -212,6 +212,16 @@ public class BluetoothLeService extends Service {
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
             BluetoothLeService.this.broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
+
+            byte[] value = characteristic.getValue();
+            String uuid = characteristic.getUuid().toString();
+            LocalDeviceEntity device = Engine.getInstance().getDeviceFromGatt(gatt);
+            if (!BluetoothLeService.this.mServiceCallbacks.isEmpty()) {
+                int size = BluetoothLeService.this.mServiceCallbacks.size();
+                for (int i = 0; i < size; i++) {
+                    ((IServiceCallback) BluetoothLeService.this.mServiceCallbacks.get(i)).onCharacteristicChanged(device, gatt, uuid, value);
+                }
+            }
         }
 
         @Override
