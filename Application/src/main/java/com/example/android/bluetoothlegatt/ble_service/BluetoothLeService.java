@@ -42,6 +42,7 @@ import android.util.Log;
 import com.example.android.bluetoothlegatt.constant.Constants;
 import com.example.android.bluetoothlegatt.models.BroadcastData;
 import com.example.android.bluetoothlegatt.models.DataPacket;
+import com.example.android.bluetoothlegatt.util.FormatUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -201,22 +202,32 @@ public class BluetoothLeService extends Service {
         public void onCharacteristicRead(BluetoothGatt gatt,
                                          BluetoothGattCharacteristic characteristic,
                                          int status) {
-            if (status == BluetoothGatt.GATT_SUCCESS) {
-                byte[] data = characteristic.getValue();
-                StringBuilder stringBuilder = new StringBuilder(data.length);
-                int length = data.length;
-                for (int i = 0; i < length; i++) {
-                    stringBuilder.append(String.format("%02X ", new Object[]{Byte.valueOf(data[i])}));
+//            if (status == BluetoothGatt.GATT_SUCCESS) {
+//                byte[] data = characteristic.getValue();
+//                StringBuilder stringBuilder = new StringBuilder(data.length);
+//                int length = data.length;
+//                for (int i = 0; i < length; i++) {
+//                    stringBuilder.append(String.format("%02X ", new Object[]{Byte.valueOf(data[i])}));
+//                }
+//                broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
+//                Log.d("onCharacteristicRead", stringBuilder.toString());
+//            }
+
+            boolean success = status == 0;
+            Log.i("TAGBLE", "onCharacteristicRead success: " + success + " value:" + FormatUtils.bytesToHexString(characteristic.getValue()));
+            LocalDeviceEntity device = Engine.getInstance().getDeviceFromGatt(gatt);
+            if (!BluetoothLeService.this.mServiceCallbacks.isEmpty()) {
+                int size = BluetoothLeService.this.mServiceCallbacks.size();
+                for (int i = 0; i < size; i++) {
+                    BluetoothLeService.this.mServiceCallbacks.get(i).onCharacteristicRead(device, gatt, characteristic, success);
                 }
-                broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
-                Log.d("onCharacteristicRead", stringBuilder.toString());
             }
         }
 
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
-            BluetoothLeService.this.broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
+//            BluetoothLeService.this.broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
 
             byte[] value = characteristic.getValue();
             String uuid = characteristic.getUuid().toString();
