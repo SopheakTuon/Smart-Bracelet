@@ -41,7 +41,6 @@ import android.util.Log;
 
 import com.example.android.bluetoothlegatt.constant.Constants;
 import com.example.android.bluetoothlegatt.models.BroadcastData;
-import com.example.android.bluetoothlegatt.models.DataPacket;
 import com.example.android.bluetoothlegatt.util.FormatUtils;
 
 import java.util.ArrayList;
@@ -427,73 +426,6 @@ public class BluetoothLeService extends Service {
 
     private BleDataHandler bleDataHandler;
 
-    private void broadcastUpdateHR(final String action,
-                                   final BluetoothGattCharacteristic characteristic) {
-        final Intent intent = new Intent(action);
-
-        // This is special handling for the Heart Rate Measurement profile.  Data parsing is
-        // carried out as per profile specifications:
-        // http://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.heart_rate_measurement.xml
-        int flag = characteristic.getProperties();
-        int format;
-        if ((flag & 0x01) != 0) {
-            format = BluetoothGattCharacteristic.FORMAT_UINT16;
-            Log.d(TAG, "Heart rate format UINT16.");
-        } else {
-            format = BluetoothGattCharacteristic.FORMAT_UINT8;
-            Log.d(TAG, "Heart rate format UINT8.");
-        }
-        final int heartRate = characteristic.getIntValue(format, 1);
-        Log.d(TAG, String.format("Received heart rate: %d", heartRate));
-        intent.putExtra(EXTRA_DATA, String.valueOf(heartRate));
-        sendBroadcast(intent);
-    }
-
-    private void broadcastUpdate(String action, BluetoothGattCharacteristic characteristic) {
-        Intent intent = new Intent(action);
-        if (!TX_CHAR_UUID.equals(characteristic.getUuid())) {
-            return;
-        }
-//        if (this.ble_status == 0 || this.ble_status == STATE_CONNECTED) {
-        this.ble_status = STATE_CONNECTED;
-        byte[] received = characteristic.getValue();
-        Log.d("lq", "received:" + byte2HexStr(received));
-        Log.d("lq", "received:" + bytesToByteString(received));
-        if (this.bleDataHandler.add_data(received)) {
-            int packet_status = this.bleDataHandler.check_packet();
-            if (packet_status == 0) {
-                DataPacket dataPacket = this.bleDataHandler.get_packet();
-                if (dataPacket != null) {
-                    Log.d("Data", "Package Data: " + bytesToByteString(dataPacket.data));
-                    BroadcastData bData = new BroadcastData(2);
-                    bData.setReceives(received);
-                    bData.data = dataPacket;
-                    intent.putExtra(BroadcastData.keyword, bData);
-                    sendBroadcast(intent);
-                }
-                this.ble_status = FREE;
-                return;
-            } else if (packet_status != STATE_CONNECTING && packet_status == STATE_CONNECTED) {
-                this.ble_status = FREE;
-                return;
-            } else {
-                return;
-            }
-        }
-//            this.bleDataHandler.clear_packet();
-        this.ble_status = FREE;
-//        } else if (this.ble_status == STATE_CONNECTING) {
-//            if (this.final_packet) {
-//                this.final_packet = false;
-//                this.ble_status = FREE;
-//            }
-//            if (characteristic.getValue().length == STATE_CONNECTING) {
-//                this.ble_status = FREE;
-//            } else {
-//                this.ble_status = FREE;
-//            }
-//        }
-    }
 
     private String bytesToByteString(byte[] bytes) {
         String btyesString = "";

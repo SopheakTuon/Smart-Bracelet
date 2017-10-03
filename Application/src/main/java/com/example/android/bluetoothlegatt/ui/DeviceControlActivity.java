@@ -54,7 +54,6 @@ import com.example.android.bluetoothlegatt.util.command.WriteCommand;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * For a given BLE device, this Activity provides the user interface to connect, display data,
@@ -218,14 +217,6 @@ public class DeviceControlActivity extends Activity {
     };
 
 
-    List<Float> ecgDataAllList = new ArrayList<>();
-    List<Float> pwDataAllList = new ArrayList<>();
-    // Handles various events fired by the Service.
-    // ACTION_GATT_CONNECTED: connected to a GATT server.
-    // ACTION_GATT_DISCONNECTED: disconnected from a GATT server.
-    // ACTION_GATT_SERVICES_DISCOVERED: discovered GATT services.
-    // ACTION_DATA_AVAILABLE: received data from the device.  This can be a result of read
-    //                        or notification operations.
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
@@ -242,44 +233,9 @@ public class DeviceControlActivity extends Activity {
                 clearUI();
                 enableElements(false);
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                // Show all the supported services and characteristics on the user interface.
-                BluetoothLeService.getInstance().addCallback(BleGattHelper.getInstance(DeviceControlActivity.this.getApplicationContext(), new gattHelperListener()));
-                displayGattServices(mBluetoothLeService.getSupportedGattServices());
+                BluetoothLeService.getInstance().addCallback(BleGattHelper.getInstance(DeviceControlActivity.this.getApplicationContext(), new GattHelperListener()));
+//                displayGattServices(mBluetoothLeService.getSupportedGattServices());
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-//                BroadcastData broadcastData = (BroadcastData) intent.getSerializableExtra(BroadcastData.keyword);
-//                int commandID = broadcastData.commandID;
-//                if (commandID == 2) {
-//                    DataPacket dataPacket = (DataPacket) broadcastData.data;
-//                    ArrayList<Byte> datas = dataPacket.data;
-//                    ArrayList<Integer> data = new ArrayList();
-//                    for (int i = 0; i < datas.size(); i++) {
-//                        data.add(datas.get(i).byteValue() & 255);
-//                    }
-//                    if (data.get(0).intValue() == 49) {
-//                        if (data.get(1).intValue() == 10) {
-//                            displayByteDate(broadcastData);
-//                            if (data.get(2) > 0) {
-//                                displayData("HR : " + String.valueOf(data.get(2).intValue()));
-//                                stopMeasureHr();
-//                            }
-//                        }
-//                        if (data.get(1).intValue() == 34) {
-//                            displayByteDate(broadcastData);
-//                            if (data.get(2) > 0) {
-//                                displayData("BP High : " + String.valueOf(data.get(2).intValue()) + " (mmhg)" + "\nBP Low : " + String.valueOf(data.get(3).intValue()) + " (mmhg)");
-//                                stopMeasureBP();
-//                            }
-//                        }
-//                        if (data.get(1).intValue() == 18) {
-//                            displayByteDate(broadcastData);
-//                            if (data.get(2) > 0) {
-//                                displayData("SPO2 : " + String.valueOf(data.get(2).intValue()) + "%");
-//                                stopMeasureSPO2();
-//                            }
-//                        }
-//                    }
-//                }
-
                 displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA) + " BPM");
             }
         }
@@ -586,81 +542,81 @@ public class DeviceControlActivity extends Activity {
     }
 
 
-    private void startMeasureHr() {
-        isHR = true;
-        displayByteDate("Collecting data...");
-        displayData("Collecting data...");
-        enableElements(false);
-//        mManager.realTimeAndOnceMeasure(10, 1);
-//        WriteCommand.openHeartRateMonitor();
-//        WriteCommand.realTimeHeartRateMonitor();
-        isMeasuring = true;
-    }
+//    private void startMeasureHr() {
+//        isHR = true;
+//        displayByteDate("Collecting data...");
+//        displayData("Collecting data...");
+//        enableElements(false);
+////        mManager.realTimeAndOnceMeasure(10, 1);
+////        WriteCommand.openHeartRateMonitor();
+////        WriteCommand.realTimeHeartRateMonitor();
+//        isMeasuring = true;
+//    }
 
-    private void stopMeasureHr() {
-        mManager.realTimeAndOnceMeasure(10, 0);
-        enableElements(true);
-    }
+//    private void stopMeasureHr() {
+//        mManager.realTimeAndOnceMeasure(10, 0);
+//        enableElements(true);
+//    }
 
-    private void startMeasureBP() {
-        displayByteDate("Collecting data...");
-        displayData("Collecting data...");
-        enableElements(false);
-        mManager.realTimeAndOnceMeasure(34, 1);
-    }
+//    private void startMeasureBP() {
+//        displayByteDate("Collecting data...");
+//        displayData("Collecting data...");
+//        enableElements(false);
+//        mManager.realTimeAndOnceMeasure(34, 1);
+//    }
 
-    private void stopMeasureBP() {
-        mManager.realTimeAndOnceMeasure(34, 0);
-        enableElements(true);
-    }
+//    private void stopMeasureBP() {
+//        mManager.realTimeAndOnceMeasure(34, 0);
+//        enableElements(true);
+//    }
 
-    private void startMeasureSPO2() {
-        displayByteDate("Collecting data...");
-        displayData("Collecting data...");
-        enableElements(false);
-        mManager.realTimeAndOnceMeasure(18, 1);
-    }
+//    private void startMeasureSPO2() {
+//        displayByteDate("Collecting data...");
+//        displayData("Collecting data...");
+//        enableElements(false);
+//        mManager.realTimeAndOnceMeasure(18, 1);
+//    }
 
-    private void stopMeasureSPO2() {
-        mManager.realTimeAndOnceMeasure(18, 0);
-        enableElements(true);
-    }
+//    private void stopMeasureSPO2() {
+//        mManager.realTimeAndOnceMeasure(18, 0);
+//        enableElements(true);
+//    }
 
     /**
      * Stop measure
      *
      * @return
      */
-    private int stopMeasure() {
-        timeMeasure = 0;
-        isMeasuring = false;
-        enableElements(true);
-        int result = WriteCommand.stopMeasuring(mBluetoothLeService);
-        /**
-         * Turn off notification of PW
-         */
-
-        return result;
-    }
+//    private int stopMeasure() {
+//        timeMeasure = 0;
+//        isMeasuring = false;
+//        enableElements(true);
+//        int result = WriteCommand.stopMeasuring(mBluetoothLeService);
+//        /**
+//         * Turn off notification of PW
+//         */
+//
+//        return result;
+//    }
 
     /**
      * Stop Measure PW
      *
      * @return return 1 : -1
      */
-    private int stopMeasurePW() {
-        /**
-         * Turn off notification of PW
-         */
-        BluetoothGattCharacteristic bluetoothGattCharacteristic = mBluetoothLeService.getBluetoothGatt().getService(UUID.fromString("0aabcdef-1111-2222-0000-facebeadaaaa")).getCharacteristic(UUID.fromString("facebead-ffff-eeee-0002-facebeadaaaa"));
-        mBluetoothLeService.getBluetoothGatt().setCharacteristicNotification(bluetoothGattCharacteristic, false);
-        BluetoothGattService bluetoothGattService = mBluetoothLeService.getBluetoothGatt().getService(UUID.fromString("0aabcdef-1111-2222-0000-facebeadaaaa"));
-        BluetoothGattCharacteristic bluetoothGattCharacteristic1 = bluetoothGattService.getCharacteristic(UUID.fromString("facebead-ffff-eeee-0005-facebeadaaaa"));
-        mBluetoothLeService.getBluetoothGatt().setCharacteristicNotification(bluetoothGattCharacteristic1, false);
-        BluetoothGattCharacteristic bluetoothGattCharacteristic2 = bluetoothGattService.getCharacteristic(UUID.fromString("ffacebead-ffff-eeee-0004-facebeadaaaa"));
-        mBluetoothLeService.getBluetoothGatt().setCharacteristicNotification(bluetoothGattCharacteristic2, false);
-        return stopMeasure();
-    }
+//    private int stopMeasurePW() {
+//        /**
+//         * Turn off notification of PW
+//         */
+//        BluetoothGattCharacteristic bluetoothGattCharacteristic = mBluetoothLeService.getBluetoothGatt().getService(UUID.fromString("0aabcdef-1111-2222-0000-facebeadaaaa")).getCharacteristic(UUID.fromString("facebead-ffff-eeee-0002-facebeadaaaa"));
+//        mBluetoothLeService.getBluetoothGatt().setCharacteristicNotification(bluetoothGattCharacteristic, false);
+//        BluetoothGattService bluetoothGattService = mBluetoothLeService.getBluetoothGatt().getService(UUID.fromString("0aabcdef-1111-2222-0000-facebeadaaaa"));
+//        BluetoothGattCharacteristic bluetoothGattCharacteristic1 = bluetoothGattService.getCharacteristic(UUID.fromString("facebead-ffff-eeee-0005-facebeadaaaa"));
+//        mBluetoothLeService.getBluetoothGatt().setCharacteristicNotification(bluetoothGattCharacteristic1, false);
+//        BluetoothGattCharacteristic bluetoothGattCharacteristic2 = bluetoothGattService.getCharacteristic(UUID.fromString("ffacebead-ffff-eeee-0004-facebeadaaaa"));
+//        mBluetoothLeService.getBluetoothGatt().setCharacteristicNotification(bluetoothGattCharacteristic2, false);
+//        return stopMeasure();
+//    }
 
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
@@ -671,8 +627,8 @@ public class DeviceControlActivity extends Activity {
         return intentFilter;
     }
 
-    class gattHelperListener implements BleGattHelperListener {
-        gattHelperListener() {
+    class GattHelperListener implements BleGattHelperListener {
+        GattHelperListener() {
         }
 
         public void onDeviceStateChangeUI(LocalDeviceEntity device, BluetoothGatt gatt, String uuid, final byte[] value) {
@@ -690,18 +646,6 @@ public class DeviceControlActivity extends Activity {
         }
 
         public void onDeviceConnectedChangeUI(final LocalDeviceEntity device, boolean showToast, final boolean fromServer) {
-//            MainActivity.this.mHandler.post(new Runnable() {
-//                public void run() {
-//                    MainActivity.this.mResideMenuInfo.setBattery("X");
-//                    MainActivity.this.mResideMenuInfo.setConnectState(MainActivity.this.getString(C1560R.string.disconnected));
-//                    LocalDataSaveTool.getInstance(MainActivity.this.getApplicationContext()).writeSp(MyConfingInfo.HARD_VERSION, "");
-//                    Intent intent = new Intent();
-//                    intent.setAction(MyConfingInfo.ON_DEVICE_STATE_CHANGE);
-//                    intent.putExtra("DEVICE_OBJ", device);
-//                    intent.putExtra(MyConfingInfo.DISCONNECT_STATE, fromServer);
-//                    MainActivity.this.sendBroadcast(intent);
-//                }
-//            });
         }
     }
 
