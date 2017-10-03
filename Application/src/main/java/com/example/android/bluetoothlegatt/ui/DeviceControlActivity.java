@@ -49,7 +49,6 @@ import com.example.android.bluetoothlegatt.ble_service.BluetoothLeService;
 import com.example.android.bluetoothlegatt.ble_service.LocalDeviceEntity;
 import com.example.android.bluetoothlegatt.manager.CommandManager;
 import com.example.android.bluetoothlegatt.models.BroadcastData;
-import com.example.android.bluetoothlegatt.models.DataPacket;
 import com.example.android.bluetoothlegatt.util.command.WriteCommand;
 
 import java.util.ArrayList;
@@ -247,39 +246,41 @@ public class DeviceControlActivity extends Activity {
                 BluetoothLeService.getInstance().addCallback(BleGattHelper.getInstance(DeviceControlActivity.this.getApplicationContext(), new gattHelperListener()));
                 displayGattServices(mBluetoothLeService.getSupportedGattServices());
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                BroadcastData broadcastData = (BroadcastData) intent.getSerializableExtra(BroadcastData.keyword);
-                int commandID = broadcastData.commandID;
-                if (commandID == 2) {
-                    DataPacket dataPacket = (DataPacket) broadcastData.data;
-                    ArrayList<Byte> datas = dataPacket.data;
-                    ArrayList<Integer> data = new ArrayList();
-                    for (int i = 0; i < datas.size(); i++) {
-                        data.add(datas.get(i).byteValue() & 255);
-                    }
-                    if (data.get(0).intValue() == 49) {
-                        if (data.get(1).intValue() == 10) {
-                            displayByteDate(broadcastData);
-                            if (data.get(2) > 0) {
-                                displayData("HR : " + String.valueOf(data.get(2).intValue()));
-                                stopMeasureHr();
-                            }
-                        }
-                        if (data.get(1).intValue() == 34) {
-                            displayByteDate(broadcastData);
-                            if (data.get(2) > 0) {
-                                displayData("BP High : " + String.valueOf(data.get(2).intValue()) + " (mmhg)" + "\nBP Low : " + String.valueOf(data.get(3).intValue()) + " (mmhg)");
-                                stopMeasureBP();
-                            }
-                        }
-                        if (data.get(1).intValue() == 18) {
-                            displayByteDate(broadcastData);
-                            if (data.get(2) > 0) {
-                                displayData("SPO2 : " + String.valueOf(data.get(2).intValue()) + "%");
-                                stopMeasureSPO2();
-                            }
-                        }
-                    }
-                }
+//                BroadcastData broadcastData = (BroadcastData) intent.getSerializableExtra(BroadcastData.keyword);
+//                int commandID = broadcastData.commandID;
+//                if (commandID == 2) {
+//                    DataPacket dataPacket = (DataPacket) broadcastData.data;
+//                    ArrayList<Byte> datas = dataPacket.data;
+//                    ArrayList<Integer> data = new ArrayList();
+//                    for (int i = 0; i < datas.size(); i++) {
+//                        data.add(datas.get(i).byteValue() & 255);
+//                    }
+//                    if (data.get(0).intValue() == 49) {
+//                        if (data.get(1).intValue() == 10) {
+//                            displayByteDate(broadcastData);
+//                            if (data.get(2) > 0) {
+//                                displayData("HR : " + String.valueOf(data.get(2).intValue()));
+//                                stopMeasureHr();
+//                            }
+//                        }
+//                        if (data.get(1).intValue() == 34) {
+//                            displayByteDate(broadcastData);
+//                            if (data.get(2) > 0) {
+//                                displayData("BP High : " + String.valueOf(data.get(2).intValue()) + " (mmhg)" + "\nBP Low : " + String.valueOf(data.get(3).intValue()) + " (mmhg)");
+//                                stopMeasureBP();
+//                            }
+//                        }
+//                        if (data.get(1).intValue() == 18) {
+//                            displayByteDate(broadcastData);
+//                            if (data.get(2) > 0) {
+//                                displayData("SPO2 : " + String.valueOf(data.get(2).intValue()) + "%");
+//                                stopMeasureSPO2();
+//                            }
+//                        }
+//                    }
+//                }
+
+                displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA) + " BPM");
             }
         }
 

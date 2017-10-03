@@ -229,15 +229,21 @@ public class BluetoothLeService extends Service {
                                             BluetoothGattCharacteristic characteristic) {
 //            BluetoothLeService.this.broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
 
-            byte[] value = characteristic.getValue();
             String uuid = characteristic.getUuid().toString();
-            LocalDeviceEntity device = Engine.getInstance().getDeviceFromGatt(gatt);
-            if (!BluetoothLeService.this.mServiceCallbacks.isEmpty()) {
-                int size = BluetoothLeService.this.mServiceCallbacks.size();
-                for (int i = 0; i < size; i++) {
-                    BluetoothLeService.this.mServiceCallbacks.get(i).onCharacteristicChanged(device, gatt, uuid, value);
+//            if (uuid.equals(DeviceConfig.HEARTRATE_FOR_TIRED_NOTIFY.toString())) {
+////                BluetoothLeService.this.broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
+//                broadcastUpdateHR(ACTION_DATA_AVAILABLE, characteristic);
+//            } else {
+                byte[] value = characteristic.getValue();
+                LocalDeviceEntity device = Engine.getInstance().getDeviceFromGatt(gatt);
+                if (!BluetoothLeService.this.mServiceCallbacks.isEmpty()) {
+                    int size = BluetoothLeService.this.mServiceCallbacks.size();
+                    for (int i = 0; i < size; i++) {
+                        BluetoothLeService.this.mServiceCallbacks.get(i).onCharacteristicChanged(device, gatt, uuid, value);
+                    }
                 }
-            }
+//            }
+
         }
 
         @Override
@@ -420,6 +426,28 @@ public class BluetoothLeService extends Service {
     }
 
     private BleDataHandler bleDataHandler;
+
+    private void broadcastUpdateHR(final String action,
+                                   final BluetoothGattCharacteristic characteristic) {
+        final Intent intent = new Intent(action);
+
+        // This is special handling for the Heart Rate Measurement profile.  Data parsing is
+        // carried out as per profile specifications:
+        // http://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.heart_rate_measurement.xml
+        int flag = characteristic.getProperties();
+        int format;
+        if ((flag & 0x01) != 0) {
+            format = BluetoothGattCharacteristic.FORMAT_UINT16;
+            Log.d(TAG, "Heart rate format UINT16.");
+        } else {
+            format = BluetoothGattCharacteristic.FORMAT_UINT8;
+            Log.d(TAG, "Heart rate format UINT8.");
+        }
+        final int heartRate = characteristic.getIntValue(format, 1);
+        Log.d(TAG, String.format("Received heart rate: %d", heartRate));
+        intent.putExtra(EXTRA_DATA, String.valueOf(heartRate));
+        sendBroadcast(intent);
+    }
 
     private void broadcastUpdate(String action, BluetoothGattCharacteristic characteristic) {
         Intent intent = new Intent(action);

@@ -90,11 +90,11 @@ public class BleNotifyParse {
         Log.i(TAG, "writeDelay receveData: " + FormatUtils.bytesToHexString(notifyData));
         mContext = mContext;
         synchronized ("mNotifyLock") {
-            excuteParse(mContext, notifyData);
+            executeParse(mContext, notifyData);
         }
     }
 
-    private void excuteParse(Context mContext, byte[] notifyData) {
+    private void executeParse(Context mContext, byte[] notifyData) {
         for (int i = 0; i < notifyData.length; i++) {
             this.buffer[((this.bufferReadB + this.bufferLength) + i) % 8192] = notifyData[i];
         }
@@ -124,7 +124,7 @@ public class BleNotifyParse {
             }
             if (isFindNotifyBegin && notifyIndex == msgLen) {
                 if (this.buffer[pos] == (byte) 22) {
-                    excuteParse(mContext, this.bufferTmp, notifyIndex);
+                    executeParse(mContext, this.bufferTmp, notifyIndex);
                     this.bufferLength -= read - this.bufferReadB;
                     this.bufferReadB = pos;
                     isFindNotifyBegin = false;
@@ -156,7 +156,7 @@ public class BleNotifyParse {
         return false;
     }
 
-    private void excuteParse(Context mContext, byte[] bufferTmp, int notifyIndex) {
+    private void executeParse(Context mContext, byte[] bufferTmp, int notifyIndex) {
         byte head = bufferTmp[0];
         byte cmd = (byte) (bufferTmp[1] & 255);
         int dataLen = bytes2Char(bufferTmp, 2);
