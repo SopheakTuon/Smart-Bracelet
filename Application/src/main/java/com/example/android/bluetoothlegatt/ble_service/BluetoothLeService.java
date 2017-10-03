@@ -180,11 +180,16 @@ public class BluetoothLeService extends Service {
             if (status == BluetoothGatt.GATT_SUCCESS) {
 //                enableTXNotification();
                 broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
-
-                BluetoothLeService.this.notifyAndSendBrocast(gatt.getServices(), gatt);
+                LocalDeviceEntity device = Engine.getInstance().getDeviceFromGatt(gatt);
                 List<BluetoothGattService> services = gatt.getServices();
                 if (services != null) {
                     BluetoothLeService.this.notifyAndSendBrocast(gatt.getServices(), gatt);
+                    if (!BluetoothLeService.this.mServiceCallbacks.isEmpty()) {
+                        int size = BluetoothLeService.this.mServiceCallbacks.size();
+                        for (int i = 0; i < size; i++) {
+                            BluetoothLeService.this.mServiceCallbacks.get(i).onBLEServiceFound(device, gatt, gatt.getServices());
+                        }
+                    }
                 }
                 Log.i("onServicesDiscovered", services.toString());
             } else {
@@ -219,7 +224,7 @@ public class BluetoothLeService extends Service {
             if (!BluetoothLeService.this.mServiceCallbacks.isEmpty()) {
                 int size = BluetoothLeService.this.mServiceCallbacks.size();
                 for (int i = 0; i < size; i++) {
-                    ((IServiceCallback) BluetoothLeService.this.mServiceCallbacks.get(i)).onCharacteristicChanged(device, gatt, uuid, value);
+                    BluetoothLeService.this.mServiceCallbacks.get(i).onCharacteristicChanged(device, gatt, uuid, value);
                 }
             }
         }
