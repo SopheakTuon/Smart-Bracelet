@@ -44,6 +44,7 @@ import android.widget.TextView;
 import com.example.android.bluetoothlegatt.R;
 import com.example.android.bluetoothlegatt.SampleGattAttributes;
 import com.example.android.bluetoothlegatt.ble_service.BleDataForBattery;
+import com.example.android.bluetoothlegatt.ble_service.BleDataForOnLineMovement;
 import com.example.android.bluetoothlegatt.ble_service.BleGattHelper;
 import com.example.android.bluetoothlegatt.ble_service.BleGattHelperListener;
 import com.example.android.bluetoothlegatt.ble_service.BluetoothLeService;
@@ -98,6 +99,7 @@ public class DeviceControlActivity extends Activity {
     private String showResult;
 
     DataSendCallback sendCallback = new C17047();
+    private boolean isFirstData;
 
     class GetDataHandler extends Handler {
         GetDataHandler() {
@@ -200,6 +202,42 @@ public class DeviceControlActivity extends Activity {
         }
     }
 
+
+
+    private Handler movementHandler = new C16941();
+    class C16941 extends Handler {
+        C16941() {
+        }
+
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 0) {
+                if (msg.arg1 == 6) {
+                    DeviceControlActivity.this.isFirstData = true;
+                } else {
+//                    Movement_Fragment.this.endTime = (long) DateUtils.currentTimeSeconds();
+//                    Movement_Fragment.this.movementEndTime = Movement_Fragment.this.formateTime(Movement_Fragment.this.endTime);
+//                    Movement_Fragment.this.keepMovementTime = (Movement_Fragment.this.endTime - Movement_Fragment.this.beginTime) - Movement_Fragment.this.keepPauseTime;
+//                    Log.i("Movement_Fragment", "运动数据：beginTime:" + Movement_Fragment.this.beginTime + "\t\tendTime:" + Movement_Fragment.this.endTime + "\t\tkeepPauseTime:" + Movement_Fragment.this.keepMovementTime);
+//                    Log.i("Movement_Fragment", "运动数据：pauseBeginTime:" + Movement_Fragment.this.pauseBeginTime + "\t\tpauseEndTime:" + Movement_Fragment.this.pauseEndTime);
+//                    Movement_Fragment.this.move_keep_time.setText(Movement_Fragment.this.formatKeepTime(Movement_Fragment.this.keepMovementTime));
+                }
+                BleDataForOnLineMovement.getBleDataForOutlineInstance().sendHRDataToDevice((byte) 0);
+                removeMessages(0);
+                Message mzg = obtainMessage();
+                mzg.what = 0;
+                mzg.arg1 = 1;
+//                if (Movement_Fragment.this.isHide) {
+//                    sendMessageDelayed(mzg, 20000);
+//                } else {
+//                    sendMessageDelayed(mzg, 1000);
+//                }
+                sendMessageDelayed(mzg, 1000);
+            }
+        }
+    }
+
+
     class C17047 implements DataSendCallback {
         C17047() {
         }
@@ -214,7 +252,7 @@ public class DeviceControlActivity extends Activity {
                         int kcalValue = FormatUtils.byte2Int(receveData, 10);
                         int paceValue = receveData[14] & 255;
                         Log.d("Value", hrValue + " " + stepValue + " " + kcalValue + " " + mileValue + " " + paceValue);
-//                        if (Movement_Fragment.this.isFirstData) {
+                        if (DeviceControlActivity.this.isFirstData) {
 //                            LocalDataSaveTool.getInstance(Movement_Fragment.this.getContext()).writeSp("movement_step", String.valueOf(stepValue));
 //                            LocalDataSaveTool.getInstance(Movement_Fragment.this.getContext()).writeSp("movement_kcal", String.valueOf(kcalValue));
 //                            LocalDataSaveTool.getInstance(Movement_Fragment.this.getContext()).writeSp("movement_hr", String.valueOf(hrValue));
@@ -236,8 +274,8 @@ public class DeviceControlActivity extends Activity {
 //                                Movement_Fragment.this.startLayout.setVisibility(8);
 //                                return;
 //                            }
-//                            return;
-//                        }
+                            return;
+                        }
 //                        if (Movement_Fragment.this.eachMinuteCount >= Movement_Fragment.this.timesCount) {
 //                            Movement_Fragment.this.eachMinuteCount = 0;
 //                        }
@@ -266,10 +304,10 @@ public class DeviceControlActivity extends Activity {
 //                        Movement_Fragment.this.move_hr.setText(moveHr);
 //                        Movement_Fragment.this.pro.setProgress((int) Movement_Fragment.this.getProgress(Movement_Fragment.this.keepMovementTime));
                     } else if (receveData[0] == (byte) 1) {
-//                        Message mzg = Movement_Fragment.this.movementHandler.obtainMessage();
-//                        mzg.what = 0;
-//                        mzg.arg1 = 6;
-//                        Movement_Fragment.this.movementHandler.sendMessage(mzg);
+                        Message mzg = DeviceControlActivity.this.movementHandler.obtainMessage();
+                        mzg.what = 0;
+                        mzg.arg1 = 6;
+                        DeviceControlActivity.this.movementHandler.sendMessage(mzg);
                     }
                 }
             });
@@ -322,10 +360,10 @@ public class DeviceControlActivity extends Activity {
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 BluetoothLeService.getInstance().addCallback(BleGattHelper.getInstance(DeviceControlActivity.this.getApplicationContext(), new GattHelperListener()));
 //                displayGattServices(mBluetoothLeService.getSupportedGattServices());
-                getAndShowBattary(null);
+//                getAndShowBattary(null);
 
-//                BleDataForOnLineMovement.getBleDataForOutlineInstance().setOnSendRecever(DeviceControlActivity.this.sendCallback);
-//                BleDataForOnLineMovement.getBleDataForOutlineInstance().sendHRDataToDevice((byte) 1);
+                BleDataForOnLineMovement.getBleDataForOutlineInstance().setOnSendRecever(DeviceControlActivity.this.sendCallback);
+                BleDataForOnLineMovement.getBleDataForOutlineInstance().sendHRDataToDevice((byte) 1);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA) + " BPM");
             }
