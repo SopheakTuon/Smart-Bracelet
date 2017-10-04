@@ -1,6 +1,7 @@
 package com.example.android.bluetoothlegatt.ble_service;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -169,126 +170,126 @@ public class BleNotifyParse {
                 bufferTmp = theData;
                 if (cmd == BleDataForBattery.fromCmd) {
                     BleDataForBattery.getInstance().dealReceData(mContext, bufferTmp, dataLen);
-                }
-// else if (cmd == BleDataForHardVersion.fromDevice) {
-//                    BleDataForHardVersion.getInstance().dealReceData(mContext, bufferTmp, dataLen);
-//                } else if (cmd == BleDataForSettingParams.fromDevice) {
-//                } else {
-//                    if (cmd == BleDataForCustomRemind.fromDevice) {
-//                        BleDataForCustomRemind.getCustomRemindDataInstance().dealTheValidData(cmd, mContext, bufferTmp);
-//                    } else if (cmd == BleDataForHRWarning.fromDevice) {
-//                        BleDataForHRWarning.getInstance().dealTheHRData(bufferTmp, mContext);
-//                    } else if (cmd == BleDataForRingDelay.fromDevice) {
-//                        BleDataForRingDelay.getDelayInstance().dealTheDelayData(mContext, bufferTmp);
-//                    } else if (cmd == BleDataForFactoryReset.fromDevice) {
-//                        BleDataForFactoryReset.getBleDataInstance().dealTheResult(mContext, bufferTmp);
-//                    } else if (cmd == BleDataForUpLoad.fromDevice) {
-//                        BleDataForUpLoad.getUpLoadInstance().dealUpLoadBackData(cmd, bufferTmp);
-//                    } else if (cmd == BleForPhoneAndSmsRemind.phoneRemindFromDevice) {
-//                        BleForPhoneAndSmsRemind.getInstance().dealTheResponse(true);
-//                    } else if (cmd == (byte) -123) {
-//                        if ((bufferTmp[0] == (byte) 0 && bufferTmp[1] == (byte) 3) || ((bufferTmp[0] == (byte) 0 && bufferTmp[1] == (byte) 2) || (bufferTmp[0] == (byte) 1 && bufferTmp[1] == (byte) 3))) {
-//                            BleForPhoneAndSmsRemind.getInstance().dealOpenResponse(bufferTmp);
-//                        } else if (bufferTmp[1] == (byte) 2 && bufferTmp[0] == (byte) 1) {
-//                            BleForQQWeiChartFacebook.getInstance().dealTheResuponse(bufferTmp);
-//                        } else if (bufferTmp[1] == (byte) 10 || bufferTmp[1] == (byte) 11 || bufferTmp[1] == (byte) 12 || bufferTmp[1] == BleDataForTakePhoto.startToDevice || bufferTmp[1] == (byte) 9 || bufferTmp[1] == BleDataForTakePhoto.takeToDevice) {
-//                            BleForQQWeiChartFacebook.getInstance().dealOpenOrCloseRequese(bufferTmp);
-//                        } else if (bufferTmp[1] == (byte) 1) {
-//                            BleForLostRemind.getInstance().dealTheLostResqonse(bufferTmp);
-//                        } else if (bufferTmp[1] == (byte) 6) {
-//                            BleForLIftUpRemind.getInstance().dealLiftUpResqonse(bufferTmp);
-//                        } else if (bufferTmp[0] == (byte) 2) {
-//                            BleForQQWeiChartFacebook.getInstance().dealOpenOrCloseRequese(bufferTmp);
-//                        }
-//                    } else if (cmd == (byte) -117) {
-//                        if (bufferTmp[0] == (byte) 0) {
-//                            BleForPhoneAndSmsRemind.getInstance().dealSmsDataBack(bufferTmp);
-//                        } else {
-//                            BleDataForQQAndOtherRemine.getIntance().dealRemindResponse(bufferTmp);
-//                        }
-//                    } else if (cmd == BleForFindDevice.fromDevice) {
-//                        BleForFindDevice.getBleForFindDeviceInstance().dealTheResponseData(bufferTmp);
-//                    } else if (cmd == BleDataForDayData.fromDevice) {
-//                        if (bufferTmp.length >= 34) {
-//                            byte pagType = bufferTmp[3];
-//                            if (pagType == (byte) 0 && bufferTmp.length == 34) {
-//                                BleDataForDayData.getDayDataInstance(mContext).dealDayData(mContext, bufferTmp);
-//                            } else if (pagType == (byte) 0) {
-//                                BleDataForDayData.getDayDataInstance(mContext).juestResponse(bufferTmp);
-//                            } else if (pagType == (byte) 1 && bufferTmp.length >= 198) {
-//                                BleDataForEachHourData.getEachHourDataInstance().dealTheEachData(bufferTmp);
-//                            } else if (pagType == (byte) 2 && bufferTmp.length > 40) {
-//                                BleDataForSleepData.getInstance(mContext).dealTheSleepData(bufferTmp);
-//                            } else if (pagType == (byte) 3 && bufferTmp.length > 180) {
-//                                BleDataForDayHeartReatData.getHRDataInstance(mContext).dealTheHeartRateData(bufferTmp);
-//                            }
-//                        }
-//                    } else if (cmd == BleBaseDataForOutlineMovement.mNotify_cmd) {
-//                        BleBaseDataForOutlineMovement.getOutlineInstance().requstOutlineData(bufferTmp);
-//                        BleNotifyParse bleNotifyParse = this;
-//                        DealTheOutLineData dealTheOutLineData = new DealTheOutLineData();
-//                        Object[] objArr = new byte[][]{bufferTmp};
-//                        if (dealTheOutLineData instanceof AsyncTask) {
+                } else if (cmd == BleDataForHardVersion.fromDevice) {
+                    BleDataForHardVersion.getInstance().dealReceData(mContext, bufferTmp, dataLen);
+                } else if (cmd == BleDataForSettingParams.fromDevice) {
+                } else {
+                    if (cmd == BleDataForCustomRemind.fromDevice) {
+                        BleDataForCustomRemind.getCustomRemindDataInstance().dealTheValidData(cmd, mContext, bufferTmp);
+                    } else if (cmd == BleDataForHRWarning.fromDevice) {
+                        BleDataForHRWarning.getInstance().dealTheHRData(bufferTmp, mContext);
+                    } else if (cmd == BleDataForRingDelay.fromDevice) {
+                        BleDataForRingDelay.getDelayInstance().dealTheDelayData(mContext, bufferTmp);
+                    } else if (cmd == BleDataForFactoryReset.fromDevice) {
+                        BleDataForFactoryReset.getBleDataInstance().dealTheResult(mContext, bufferTmp);
+                    } else if (cmd == BleDataForUpLoad.fromDevice) {
+                        BleDataForUpLoad.getUpLoadInstance().dealUpLoadBackData(cmd, bufferTmp);
+                    } else if (cmd == BleForPhoneAndSmsRemind.phoneRemindFromDevice) {
+                        BleForPhoneAndSmsRemind.getInstance().dealTheResponse(true);
+                    } else if (cmd == (byte) -123) {
+                        if ((bufferTmp[0] == (byte) 0 && bufferTmp[1] == (byte) 3) || ((bufferTmp[0] == (byte) 0 && bufferTmp[1] == (byte) 2) || (bufferTmp[0] == (byte) 1 && bufferTmp[1] == (byte) 3))) {
+                            BleForPhoneAndSmsRemind.getInstance().dealOpenResponse(bufferTmp);
+                        } else if (bufferTmp[1] == (byte) 2 && bufferTmp[0] == (byte) 1) {
+                            BleForQQWeiChartFacebook.getInstance().dealTheResuponse(bufferTmp);
+                        } else if (bufferTmp[1] == (byte) 10 || bufferTmp[1] == (byte) 11 || bufferTmp[1] == (byte) 12 || bufferTmp[1] == BleDataForTakePhoto.startToDevice || bufferTmp[1] == (byte) 9 || bufferTmp[1] == BleDataForTakePhoto.takeToDevice) {
+                            BleForQQWeiChartFacebook.getInstance().dealOpenOrCloseRequese(bufferTmp);
+                        } else if (bufferTmp[1] == (byte) 1) {
+                            BleForLostRemind.getInstance().dealTheLostResqonse(bufferTmp);
+                        } else if (bufferTmp[1] == (byte) 6) {
+                            BleForLIftUpRemind.getInstance().dealLiftUpResqonse(bufferTmp);
+                        } else if (bufferTmp[0] == (byte) 2) {
+                            BleForQQWeiChartFacebook.getInstance().dealOpenOrCloseRequese(bufferTmp);
+                        }
+                    } else if (cmd == (byte) -117) {
+                        if (bufferTmp[0] == (byte) 0) {
+                            BleForPhoneAndSmsRemind.getInstance().dealSmsDataBack(bufferTmp);
+                        } else {
+                            BleDataForQQAndOtherRemine.getIntance().dealRemindResponse(bufferTmp);
+                        }
+                    } else if (cmd == BleForFindDevice.fromDevice) {
+                        BleForFindDevice.getBleForFindDeviceInstance().dealTheResponseData(bufferTmp);
+                    } else if (cmd == BleDataForDayData.fromDevice) {
+                        if (bufferTmp.length >= 34) {
+                            byte pagType = bufferTmp[3];
+                            if (pagType == (byte) 0 && bufferTmp.length == 34) {
+                                BleDataForDayData.getDayDataInstance(mContext).dealDayData(mContext, bufferTmp);
+                            } else if (pagType == (byte) 0) {
+                                BleDataForDayData.getDayDataInstance(mContext).juestResponse(bufferTmp);
+                            } else if (pagType == (byte) 1 && bufferTmp.length >= 198) {
+                                BleDataForEachHourData.getEachHourDataInstance().dealTheEachData(bufferTmp);
+                            } else if (pagType == (byte) 2 && bufferTmp.length > 40) {
+                                BleDataForSleepData.getInstance(mContext).dealTheSleepData(bufferTmp);
+                            } else if (pagType == (byte) 3 && bufferTmp.length > 180) {
+                                BleDataForDayHeartReatData.getHRDataInstance(mContext).dealTheHeartRateData(bufferTmp);
+                            }
+                        }
+                    } else if (cmd == BleBaseDataForOutlineMovement.mNotify_cmd) {
+                        BleBaseDataForOutlineMovement.getOutlineInstance().requstOutlineData(bufferTmp);
+                        BleNotifyParse bleNotifyParse = this;
+                        DealTheOutLineData dealTheOutLineData = new DealTheOutLineData();
+                        Object[] objArr = new byte[][]{bufferTmp};
+                        if (dealTheOutLineData instanceof AsyncTask) {
 //                            AsyncTaskInstrumentation.execute(dealTheOutLineData, objArr);
-//                        } else {
+                        } else {
 //                            dealTheOutLineData.execute(objArr);
-//                        }
-//                    } else if (cmd == BleDataforSyn.back_cmd) {
-//                        BleDataforSyn.getSynInstance().dealTheResult();
-//                    } else if (cmd == BleDataForCustomRemind.fromDeviceNull) {
-//                        BleDataForCustomRemind.getCustomRemindDataInstance().dealTheValidData(cmd, mContext, bufferTmp);
-//                    } else if (cmd == BleForGetFatigueData.fromDevice) {
-//                        BleForGetFatigueData.getInstance(mContext).dealTheResbonseData(bufferTmp);
-//                    } else if (cmd == BleForGetFatigueData.exceptionDevice) {
-//                        BleForGetFatigueData.getInstance(mContext).dealException();
-//                    } else if (cmd == BleForSitRemind.fromDevice) {
-//                        BleForSitRemind.getInstance().dealTheResponseData(bufferTmp);
-//                    } else if (cmd == BleForSitRemind.excepteionDevice) {
-//                        BleForSitRemind.getInstance().dealSitException(bufferTmp);
-//                    } else if (cmd == BleDataForSettingArgs.fromDevice) {
-//                        BleDataForSettingArgs.getInstance(mContext).dealTheBack(bufferTmp);
-//                    } else if (cmd == BleDataForTakePhoto.startFromDevice) {
-//                        BleDataForTakePhoto.getInstance().dealOpenResponse(bufferTmp);
-//                    } else if (cmd == BleDataForTakePhoto.takeFromDevice) {
-//                        BleDataForTakePhoto.getInstance().backMessageToDevice();
-//                    } else if (cmd == DeviceExceptionDeal.fromDevice) {
-//                        DeviceExceptionDeal.getExceptionInstance(mContext).dealExceptionInfo(bufferTmp);
-//                    } else if (cmd == DeviceExceptionDeal.testFromDevice) {
-//                        DeviceExceptionDeal.getExceptionInstance(mContext).dealTextData(bufferTmp);
-//                    } else if (cmd == BleDataForOnLineMovement.fromDevice) {
-//                        BleDataForOnLineMovement.getBleDataForOutlineInstance().dealOnlineHRMonitor(bufferTmp);
-//                    } else if (cmd == BleBaseDataForBlood.mNotify_cmd) {
-//                        Log.i(TAG, "writeDelay receveData: " + bufferTmp[0]);
-//                        if (bufferTmp[0] == (byte) 4) {
-//                            SharedPreferences preferences = mContext.getSharedPreferences("user", 0);
-//                            String strlow = preferences.getString("short_ed", "");
-//                            String strhig = preferences.getString("height_ed", "");
-//                            if (strlow.length() > 1 && strhig.length() > 1) {
-//                                int int_s = Integer.parseInt(strlow);
-//                                BleBaseDataForBlood.getBloodInstance().requstOutlineData(Integer.parseInt(strhig), int_s);
-//                            }
-//                            BleBaseDataForBlood.getBloodInstance().dealTheData(bufferTmp);
-//                        } else if (bufferTmp[0] == (byte) 2) {
-//                            BleBaseDataForBlood.getBloodInstance().requestdevice();
-//                        }
-//                        BleBaseDataForBlood.getBloodInstance().requstOutlineData();
-//                        BleBaseDataForBlood.getBloodInstance().dealTheData(bufferTmp);
-//                    } else if (cmd == BleDataForPhoneComm.fromDevice) {
-//                        BleDataForPhoneComm.getInstance().dealDeviceComm(bufferTmp);
-//                    } else if (cmd == BleReadDeviceMenuState.fromDevice) {
-//                        BleReadDeviceMenuState.getInstance().sendSuccess(bufferTmp);
-//                    } else if (cmd == BleDataForWeather.fromDevice || cmd == BleDataForWeather.fromDeviceNew) {
-//                        BleDataForWeather.getIntance().dealWeatherBack(bufferTmp);
-//                    } else if (cmd == BleDataForFrame.fromDevice) {
-//                        Log.i(TAG, "writeDelay receveData222: " + FormatUtils.bytesToHexString(bufferTmp));
-//                        BleDataForFrame.getInstance().dealReceData(bufferTmp);
-//                    } else if (cmd == BleDataForTarget.fromDevice) {
-//                        BleDataForTarget.getInstance().dealComm(bufferTmp);
-//                    } else if (cmd == BleDataForFrame.fromDevice3) {
-//                        BleDataForFrame.getInstance().dealReceB3(bufferTmp);
-//                    }
+                        }
+                    } else if (cmd == BleDataforSyn.back_cmd) {
+                        BleDataforSyn.getSynInstance().dealTheResult();
+                    } else if (cmd == BleDataForCustomRemind.fromDeviceNull) {
+                        BleDataForCustomRemind.getCustomRemindDataInstance().dealTheValidData(cmd, mContext, bufferTmp);
+                    } else if (cmd == BleForGetFatigueData.fromDevice) {
+                        BleForGetFatigueData.getInstance(mContext).dealTheResbonseData(bufferTmp);
+                    } else if (cmd == BleForGetFatigueData.exceptionDevice) {
+                        BleForGetFatigueData.getInstance(mContext).dealException();
+                    } else if (cmd == BleForSitRemind.fromDevice) {
+                        BleForSitRemind.getInstance().dealTheResponseData(bufferTmp);
+                    } else if (cmd == BleForSitRemind.excepteionDevice) {
+                        BleForSitRemind.getInstance().dealSitException(bufferTmp);
+                    } else if (cmd == BleDataForSettingArgs.fromDevice) {
+                        BleDataForSettingArgs.getInstance(mContext).dealTheBack(bufferTmp);
+                    } else if (cmd == BleDataForTakePhoto.startFromDevice) {
+                        BleDataForTakePhoto.getInstance().dealOpenResponse(bufferTmp);
+                    } else if (cmd == BleDataForTakePhoto.takeFromDevice) {
+                        BleDataForTakePhoto.getInstance().backMessageToDevice();
+                    } else if (cmd == DeviceExceptionDeal.fromDevice) {
+                        DeviceExceptionDeal.getExceptionInstance(mContext).dealExceptionInfo(bufferTmp);
+                    } else if (cmd == DeviceExceptionDeal.testFromDevice) {
+                        DeviceExceptionDeal.getExceptionInstance(mContext).dealTextData(bufferTmp);
+                    } else if (cmd == BleDataForOnLineMovement.fromDevice) {
+                        BleDataForOnLineMovement.getBleDataForOutlineInstance().dealOnlineHRMonitor(bufferTmp);
+                    } else if (cmd == BleBaseDataForBlood.mNotify_cmd) {
+                        Log.i(TAG, "writeDelay receveData: " + bufferTmp[0]);
+                        if (bufferTmp[0] == (byte) 4) {
+                            SharedPreferences preferences = mContext.getSharedPreferences("user", 0);
+                            String strlow = preferences.getString("short_ed", "");
+                            String strhig = preferences.getString("height_ed", "");
+                            if (strlow.length() > 1 && strhig.length() > 1) {
+                                int int_s = Integer.parseInt(strlow);
+                                BleBaseDataForBlood.getBloodInstance().requstOutlineData(Integer.parseInt(strhig), int_s);
+                            }
+                            BleBaseDataForBlood.getBloodInstance().dealTheData(bufferTmp);
+                        } else if (bufferTmp[0] == (byte) 2) {
+                            BleBaseDataForBlood.getBloodInstance().requestdevice();
+                        }
+                        BleBaseDataForBlood.getBloodInstance().requstOutlineData();
+                        BleBaseDataForBlood.getBloodInstance().dealTheData(bufferTmp);
+                    } else if (cmd == BleDataForPhoneComm.fromDevice) {
+                        BleDataForPhoneComm.getInstance().dealDeviceComm(bufferTmp);
+                    } else if (cmd == BleReadDeviceMenuState.fromDevice) {
+                        BleReadDeviceMenuState.getInstance().sendSuccess(bufferTmp);
+                    } else if (cmd == BleDataForWeather.fromDevice || cmd == BleDataForWeather.fromDeviceNew) {
+                        BleDataForWeather.getIntance().dealWeatherBack(bufferTmp);
+                    } else if (cmd == BleDataForFrame.fromDevice) {
+                        Log.i(TAG, "writeDelay receveData222: " + FormatUtils.bytesToHexString(bufferTmp));
+                        BleDataForFrame.getInstance().dealReceData(bufferTmp);
+                    } else if (cmd == BleDataForTarget.fromDevice) {
+                        BleDataForTarget.getInstance().dealComm(bufferTmp);
+                    } else if (cmd == BleDataForFrame.fromDevice3) {
+                        BleDataForFrame.getInstance().dealReceB3(bufferTmp);
+                    }
                 }
             }
+        }
     }
 
     int bytes2Char(byte[] data, int offset) {
