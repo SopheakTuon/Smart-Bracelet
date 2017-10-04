@@ -613,7 +613,6 @@ public class DeviceControlActivity extends Activity {
 //        mBluetoothLeService.getBluetoothGatt().setCharacteristicNotification(bluetoothGattCharacteristic2, false);
 //        return stopMeasure();
 //    }
-
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(BluetoothLeService.ACTION_GATT_CONNECTED);

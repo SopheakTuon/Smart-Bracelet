@@ -89,9 +89,9 @@ public class BleNotifyParse {
     public void doParse(Context mContext, byte[] notifyData) {
         Log.i(TAG, "writeDelay receveData: " + FormatUtils.bytesToHexString(notifyData));
         mContext = mContext;
-        synchronized ("mNotifyLock") {
-            executeParse(mContext, notifyData);
-        }
+//        synchronized ("mNotifyLock") {
+//            executeParse(mContext, notifyData);
+//        }
     }
 
     private void executeParse(Context mContext, byte[] notifyData) {
