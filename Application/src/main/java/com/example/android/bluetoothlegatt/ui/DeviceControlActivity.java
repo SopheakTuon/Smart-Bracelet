@@ -203,8 +203,8 @@ public class DeviceControlActivity extends Activity {
     }
 
 
-
     private Handler movementHandler = new C16941();
+
     class C16941 extends Handler {
         C16941() {
         }
@@ -252,6 +252,16 @@ public class DeviceControlActivity extends Activity {
                         int kcalValue = FormatUtils.byte2Int(receveData, 10);
                         int paceValue = receveData[14] & 255;
                         Log.d("Value", hrValue + " " + stepValue + " " + kcalValue + " " + mileValue + " " + paceValue);
+
+                        StringBuilder stringBuilder = new StringBuilder("");
+                        stringBuilder.append("Heart Rate : ");
+                        stringBuilder.append(hrValue + "\n");
+                        stringBuilder.append("Step : ");
+                        stringBuilder.append(stepValue + "\n");
+                        stringBuilder.append("Calories : ");
+                        stringBuilder.append(kcalValue);
+
+                        textViewBattery.setText(stringBuilder.toString());
                         if (DeviceControlActivity.this.isFirstData) {
 //                            LocalDataSaveTool.getInstance(Movement_Fragment.this.getContext()).writeSp("movement_step", String.valueOf(stepValue));
 //                            LocalDataSaveTool.getInstance(Movement_Fragment.this.getContext()).writeSp("movement_kcal", String.valueOf(kcalValue));
