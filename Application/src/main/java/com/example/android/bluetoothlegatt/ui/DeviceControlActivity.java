@@ -44,7 +44,6 @@ import android.widget.TextView;
 import com.example.android.bluetoothlegatt.R;
 import com.example.android.bluetoothlegatt.SampleGattAttributes;
 import com.example.android.bluetoothlegatt.ble_service.BleDataForBattery;
-import com.example.android.bluetoothlegatt.ble_service.BleDataForOnLineMovement;
 import com.example.android.bluetoothlegatt.ble_service.BleGattHelper;
 import com.example.android.bluetoothlegatt.ble_service.BleGattHelperListener;
 import com.example.android.bluetoothlegatt.ble_service.BluetoothLeService;
@@ -325,7 +324,8 @@ public class DeviceControlActivity extends Activity {
 //                displayGattServices(mBluetoothLeService.getSupportedGattServices());
                 getAndShowBattary(null);
 
-                BleDataForOnLineMovement.getBleDataForOutlineInstance().setOnSendRecever(DeviceControlActivity.this.sendCallback);
+//                BleDataForOnLineMovement.getBleDataForOutlineInstance().setOnSendRecever(DeviceControlActivity.this.sendCallback);
+//                BleDataForOnLineMovement.getBleDataForOutlineInstance().sendHRDataToDevice((byte) 1);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA) + " BPM");
             }
