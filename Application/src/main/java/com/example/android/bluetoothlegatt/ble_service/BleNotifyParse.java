@@ -89,9 +89,9 @@ public class BleNotifyParse {
     public void doParse(Context mContext, byte[] notifyData) {
         Log.i(TAG, "writeDelay receveData: " + FormatUtils.bytesToHexString(notifyData));
         mContext = mContext;
-//        synchronized ("mNotifyLock") {
-//            executeParse(mContext, notifyData);
-//        }
+        synchronized ("mNotifyLock") {
+            executeParse(mContext, notifyData);
+        }
     }
 
     private void executeParse(Context mContext, byte[] notifyData) {
@@ -167,9 +167,10 @@ public class BleNotifyParse {
                     theData[i] = bufferTmp[i + 4];
                 }
                 bufferTmp = theData;
-//                if (cmd == BleDataForBattery.fromCmd) {
-//                    BleDataForBattery.getInstance().dealReceData(mContext, bufferTmp, dataLen);
-//                } else if (cmd == BleDataForHardVersion.fromDevice) {
+                if (cmd == BleDataForBattery.fromCmd) {
+                    BleDataForBattery.getInstance().dealReceData(mContext, bufferTmp, dataLen);
+                }
+// else if (cmd == BleDataForHardVersion.fromDevice) {
 //                    BleDataForHardVersion.getInstance().dealReceData(mContext, bufferTmp, dataLen);
 //                } else if (cmd == BleDataForSettingParams.fromDevice) {
 //                } else {

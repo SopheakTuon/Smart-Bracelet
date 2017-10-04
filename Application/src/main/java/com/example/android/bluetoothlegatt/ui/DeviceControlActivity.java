@@ -43,9 +43,11 @@ import android.widget.TextView;
 
 import com.example.android.bluetoothlegatt.R;
 import com.example.android.bluetoothlegatt.SampleGattAttributes;
+import com.example.android.bluetoothlegatt.ble_service.BleDataForBattery;
 import com.example.android.bluetoothlegatt.ble_service.BleGattHelper;
 import com.example.android.bluetoothlegatt.ble_service.BleGattHelperListener;
 import com.example.android.bluetoothlegatt.ble_service.BluetoothLeService;
+import com.example.android.bluetoothlegatt.ble_service.DataSendCallback;
 import com.example.android.bluetoothlegatt.ble_service.LocalDeviceEntity;
 import com.example.android.bluetoothlegatt.manager.CommandManager;
 import com.example.android.bluetoothlegatt.models.BroadcastData;
@@ -68,7 +70,7 @@ public class DeviceControlActivity extends Activity {
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
 
     private TextView mConnectionState;
-    private TextView mDataField, tvTimer, mByteData;
+    private TextView mDataField, tvTimer, mByteData, textViewBattery;
     private String mDeviceName;
     private String mDeviceAddress;
     private ExpandableListView mGattServicesList;
@@ -235,6 +237,7 @@ public class DeviceControlActivity extends Activity {
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 BluetoothLeService.getInstance().addCallback(BleGattHelper.getInstance(DeviceControlActivity.this.getApplicationContext(), new GattHelperListener()));
 //                displayGattServices(mBluetoothLeService.getSupportedGattServices());
+                getAndShowBattary(null);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA) + " BPM");
             }
@@ -309,6 +312,7 @@ public class DeviceControlActivity extends Activity {
         mGattServicesList.setOnChildClickListener(servicesListClickListner);
         mConnectionState = (TextView) findViewById(R.id.connection_state);
         mDataField = (TextView) findViewById(R.id.data_value);
+        textViewBattery = (TextView) findViewById(R.id.textViewBattery);
         mByteData = (TextView) findViewById(R.id.byte_data_value);
         tvTimer = (TextView) findViewById(R.id.tvTimer);
 
@@ -642,6 +646,34 @@ public class DeviceControlActivity extends Activity {
 
         public void onDeviceConnectedChangeUI(final LocalDeviceEntity device, boolean showToast, final boolean fromServer) {
         }
+    }
+
+    private void getAndShowBattary(Message msg) {
+//        if (!this.closeTheRequest && BluetoothLeService.getInstance() != null && BluetoothLeService.getInstance().isConnectedDevice()) {
+//            final int ar = msg.arg1;
+//            Log.i(TAG, "message.arg1:" + ar);
+        BleDataForBattery getB = BleDataForBattery.getInstance();
+        getB.setBatteryListener(new DataSendCallback() {
+            public void sendSuccess(final byte[] receveData) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        textViewBattery.setText(String.valueOf(receveData[0] & 255) + "%");
+                    }
+                });
+            }
+
+            public void sendFailed() {
+            }
+
+            public void sendFinished() {
+//                    if (ar == 0) {
+//                        MainActivity.this.mHandler.sendEmptyMessageDelayed(9, 0);
+//                    }
+            }
+        });
+        getB.getBatteryPx();
+//        }
     }
 
 }
