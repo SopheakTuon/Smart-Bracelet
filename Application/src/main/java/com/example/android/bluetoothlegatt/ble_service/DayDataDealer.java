@@ -46,7 +46,7 @@ public class DayDataDealer {
         int moveCalorie = FormatUtils.byte2Int(bufferTmp, 20);
         int sitTime = FormatUtils.byte2Int(bufferTmp, 24);
         int sitCalorie = FormatUtils.byte2Int(bufferTmp, 28);
-        String dateC = getCurrentDate();
+//        String dateC = getCurrentDate();
         saveIntoDatabase(0, dataDate, stepAll, calorie, mileage, movementTime, moveCalorie, sitTime, sitCalorie, "0");
     }
 
