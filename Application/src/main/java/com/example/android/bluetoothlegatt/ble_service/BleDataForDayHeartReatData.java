@@ -110,7 +110,7 @@ public class BleDataForDayHeartReatData extends BleBaseDataManage {
         bytes[2] = (byte) (year & 255);
         bytes[3] = (byte) 3;
         bytes[4] = (byte) 8;
-        synchronized (this) {
+//        synchronized (this) {
             for (int i = count; i >= 1; i--) {
                 this.packageCount = i;
                 bytes[5] = (byte) (i & 255);
@@ -123,13 +123,13 @@ public class BleDataForDayHeartReatData extends BleBaseDataManage {
                 bundle.putByteArray("data_pak_send", bytes);
                 msg.setData(bundle);
                 this.hrHandler.sendMessageDelayed(msg, (long) SendLengthHelper.getSendLengthDelay(length, 300));
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    wait();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
             }
-        }
+//        }
     }
 
     public void dealTheHeartRateData(byte[] hr) {
