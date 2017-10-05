@@ -219,10 +219,10 @@ public class DeviceControlActivity extends Activity {
     }
 
 
-    private Handler movementHandler = new C16941();
+    private Handler movementHandler = new MovementHandler();
 
-    class C16941 extends Handler {
-        C16941() {
+    class MovementHandler extends Handler {
+        MovementHandler() {
         }
 
         public void handleMessage(Message msg) {
