@@ -1,8 +1,8 @@
-package com.example.android.bluetoothlegatt.util;
+package com.example.android.bluetoothlegatt.ble_service.util;
 
 /**
  * @author Sopheak Tuon
- * @created on 26-Sep-17
+ * @created on 05-Oct-17
  */
 
 import java.math.BigInteger;
@@ -105,6 +105,10 @@ public class FormatUtils {
         return new byte[]{(byte) (a >> 24), (byte) (a >> 16), (byte) (a >> 8), (byte) a};
     }
 
+    public static byte[] int2Byte_HL_(int a) {
+        return new byte[]{(byte) a, (byte) (a >> 8), (byte) (a >> 16), (byte) (a >> 24)};
+    }
+
     public static byte[] int2Byte_LH(int a) {
         return new byte[]{(byte) (a >> 24), (byte) (a >> 16), (byte) (a >> 8), (byte) a};
     }
@@ -164,7 +168,7 @@ public class FormatUtils {
         return stringBuilder.toString();
     }
 
-    public static String byteToHexStringUn0X(byte src) {
+    public static String byteToHexStringNo0X(byte src) {
         StringBuilder stringBuilder = new StringBuilder();
         String hv = Integer.toHexString(src & 255);
         if (hv.length() < 2) {
@@ -286,5 +290,3 @@ public class FormatUtils {
         return (byte) ((b & 240) >> 4);
     }
 }
-
-

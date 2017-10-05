@@ -49,15 +49,21 @@ import com.example.android.bluetoothlegatt.ble_service.BleGattHelper;
 import com.example.android.bluetoothlegatt.ble_service.BleGattHelperListener;
 import com.example.android.bluetoothlegatt.ble_service.BluetoothLeService;
 import com.example.android.bluetoothlegatt.ble_service.DataSendCallback;
+import com.example.android.bluetoothlegatt.ble_service.LocalDataSaveTool;
 import com.example.android.bluetoothlegatt.ble_service.LocalDeviceEntity;
+import com.example.android.bluetoothlegatt.ble_service.OutLineDataEntity;
+import com.example.android.bluetoothlegatt.ble_service.util.DateUtils;
 import com.example.android.bluetoothlegatt.manager.CommandManager;
 import com.example.android.bluetoothlegatt.models.BroadcastData;
 import com.example.android.bluetoothlegatt.util.FormatUtils;
 import com.example.android.bluetoothlegatt.util.command.WriteCommand;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * For a given BLE device, this Activity provides the user interface to connect, display data,
@@ -100,6 +106,16 @@ public class DeviceControlActivity extends Activity {
 
     DataSendCallback sendCallback = new C17047();
     private boolean isFirstData;
+    private boolean isMovementing;
+    private boolean isPauseing;
+    private long beginTime;
+    private Object movementBegginTime;
+
+    private OutLineDataEntity movementEntity;
+
+
+    private int eachMinuteCount;
+    private int timesCount = 60;
 
     class GetDataHandler extends Handler {
         GetDataHandler() {
@@ -262,57 +278,65 @@ public class DeviceControlActivity extends Activity {
                         stringBuilder.append(kcalValue);
 
                         textViewBattery.setText(stringBuilder.toString());
+
                         if (DeviceControlActivity.this.isFirstData) {
-//                            LocalDataSaveTool.getInstance(Movement_Fragment.this.getContext()).writeSp("movement_step", String.valueOf(stepValue));
-//                            LocalDataSaveTool.getInstance(Movement_Fragment.this.getContext()).writeSp("movement_kcal", String.valueOf(kcalValue));
-//                            LocalDataSaveTool.getInstance(Movement_Fragment.this.getContext()).writeSp("movement_hr", String.valueOf(hrValue));
-//                            Movement_Fragment.this.beginTime = (long) DateUtils.currentTimeSeconds();
-//                            Movement_Fragment.this.movementBegginTime = Movement_Fragment.this.formateTime(Movement_Fragment.this.beginTime);
-//                            Movement_Fragment.this.isFirstData = false;
-//                            Movement_Fragment.this.isMovementing = true;
-//                            Movement_Fragment.this.isPauseing = false;
-//                            if (Movement_Fragment.this.endLayout.getVisibility() == 8) {
-//                                Movement_Fragment.this.endLayout.setVisibility(0);
-//                                if (Movement_Fragment.this.pauseButton.getVisibility() == 8) {
-//                                    Movement_Fragment.this.pauseButton.setVisibility(0);
-//                                }
-//                                if (Movement_Fragment.this.restartButton.getVisibility() == 0) {
-//                                    Movement_Fragment.this.restartButton.setVisibility(8);
-//                                }
-//                            }
-//                            if (Movement_Fragment.this.startLayout.getVisibility() == 0) {
-//                                Movement_Fragment.this.startLayout.setVisibility(8);
-//                                return;
-//                            }
+//                            StringBuilder stringBuilder = new StringBuilder("");
+//                            stringBuilder.append("Heart Rate : ");
+//                            stringBuilder.append(hrValue + "\n");
+//                            stringBuilder.append("Step : ");
+//                            stringBuilder.append(stepValue + "\n");
+//                            stringBuilder.append("Calories : ");
+//                            stringBuilder.append(kcalValue);
+//
+//                            textViewBattery.setText(stringBuilder.toString());
+
+                            LocalDataSaveTool.getInstance(DeviceControlActivity.this).writeSp("movement_step", String.valueOf(stepValue));
+                            LocalDataSaveTool.getInstance(DeviceControlActivity.this).writeSp("movement_kcal", String.valueOf(kcalValue));
+                            LocalDataSaveTool.getInstance(DeviceControlActivity.this).writeSp("movement_hr", String.valueOf(hrValue));
+                            DeviceControlActivity.this.beginTime = (long) DateUtils.currentTimeSeconds();
+                            DeviceControlActivity.this.movementBegginTime = DeviceControlActivity.this.formateTime(DeviceControlActivity.this.beginTime);
+                            DeviceControlActivity.this.isFirstData = false;
+                            DeviceControlActivity.this.isMovementing = true;
+                            DeviceControlActivity.this.isPauseing = false;
                             return;
                         }
-//                        if (Movement_Fragment.this.eachMinuteCount >= Movement_Fragment.this.timesCount) {
-//                            Movement_Fragment.this.eachMinuteCount = 0;
+//                        if (DeviceControlActivity.this.eachMinuteCount >= DeviceControlActivity.this.timesCount) {
+//                            DeviceControlActivity.this.eachMinuteCount = 0;
 //                        }
-//                        Movement_Fragment.this.eachMinuteCount = Movement_Fragment.this.eachMinuteCount + 1;
-//                        int steps = Integer.valueOf(LocalDataSaveTool.getInstance(Movement_Fragment.this.getContext()).readSp("movement_step")).intValue();
-//                        int kcals = Integer.valueOf(LocalDataSaveTool.getInstance(Movement_Fragment.this.getContext()).readSp("movement_kcal")).intValue();
-//                        int hrs = Integer.valueOf(LocalDataSaveTool.getInstance(Movement_Fragment.this.getContext()).readSp("movement_hr")).intValue();
+//                        DeviceControlActivity.this.eachMinuteCount = DeviceControlActivity.this.eachMinuteCount + 1;
+//                        int steps = Integer.valueOf(LocalDataSaveTool.getInstance(DeviceControlActivity.this).readSp("movement_step")).intValue();
+//                        int kcals = Integer.valueOf(LocalDataSaveTool.getInstance(DeviceControlActivity.this).readSp("movement_kcal")).intValue();
+//                        int hrs = Integer.valueOf(LocalDataSaveTool.getInstance(DeviceControlActivity.this).readSp("movement_hr")).intValue();
 //                        Log.i("Movement_Fragment", "movement::steps原始" + steps + "新" + stepValue + "--原始kcals;" + kcals + "新" + kcalValue);
 //                        String moveSteps = String.valueOf(stepValue - steps);
 //                        String moveKcal = String.valueOf(kcalValue - kcals);
 //                        String moveHr = String.valueOf(hrValue);
-//                        Movement_Fragment.this.movementEntity.setStepCount(Integer.valueOf(moveSteps).intValue());
-//                        Movement_Fragment.this.movementEntity.setCalorie(Integer.valueOf(moveKcal).intValue());
-//                        if (Movement_Fragment.this.eachMinuteCount == 1) {
+//                        DeviceControlActivity.this.movementEntity.setStepCount(Integer.valueOf(moveSteps).intValue());
+//                        DeviceControlActivity.this.movementEntity.setCalorie(Integer.valueOf(moveKcal).intValue());
+//                        if (DeviceControlActivity.this.eachMinuteCount == 1) {
 //                            String hr;
 //                            if (moveHr == null || moveHr.equals("") || moveHr.equals("null")) {
 //                                hr = FormatUtils.byteToHexStringUn0X((byte) 0);
 //                            } else {
 //                                hr = FormatUtils.byteToHexStringUn0X(receveData[1]);
 //                            }
-//                            Movement_Fragment.this.movementEntity.setHeartReat(Movement_Fragment.this.movementEntity.getHeartReat() + hr);
-//                            Log.i("Movement_Fragment", "movement::hr:" + Movement_Fragment.this.movementEntity.getHeartReat() + hr);
+//                            DeviceControlActivity.this.movementEntity.setHeartReat(DeviceControlActivity.this.movementEntity.getHeartReat() + hr);
+//                            Log.i("Movement_Fragment", "movement::hr:" + DeviceControlActivity.this.movementEntity.getHeartReat() + hr);
 //                        }
-//                        Movement_Fragment.this.move_step.setText(moveSteps);
-//                        Movement_Fragment.this.move_kcal.setText(moveKcal);
-//                        Movement_Fragment.this.move_hr.setText(moveHr);
-//                        Movement_Fragment.this.pro.setProgress((int) Movement_Fragment.this.getProgress(Movement_Fragment.this.keepMovementTime));
+//                        DeviceControlActivity.this.move_step.setText(moveSteps);
+//                        DeviceControlActivity.this.move_kcal.setText(moveKcal);
+//                        DeviceControlActivity.this.move_hr.setText(moveHr);
+//                        DeviceControlActivity.this.pro.setProgress((int) Movement_Fragment.this.getProgress(DeviceControlActivity.this.keepMovementTime));
+
+//                        StringBuilder stringBuilder1 = new StringBuilder("");
+//                        stringBuilder1.append("Heart Rate : ");
+//                        stringBuilder1.append(moveHr + "\n");
+//                        stringBuilder1.append("Step : ");
+//                        stringBuilder1.append(moveSteps + "\n");
+//                        stringBuilder1.append("Calories : ");
+//                        stringBuilder1.append(moveKcal);
+//
+//                        textViewBattery.setText(stringBuilder1.toString());
                     } else if (receveData[0] == (byte) 1) {
                         Message mzg = DeviceControlActivity.this.movementHandler.obtainMessage();
                         mzg.what = 0;
@@ -328,6 +352,10 @@ public class DeviceControlActivity extends Activity {
 
         public void sendFinished() {
         }
+    }
+
+    private String formateTime(long beginTime) {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(new Date(1000 * beginTime));
     }
 
 
@@ -372,6 +400,7 @@ public class DeviceControlActivity extends Activity {
 //                displayGattServices(mBluetoothLeService.getSupportedGattServices());
 //                getAndShowBattary(null);
 
+                DeviceControlActivity.this.movementEntity = new OutLineDataEntity();
                 BleDataForOnLineMovement.getBleDataForOutlineInstance().setOnSendRecever(DeviceControlActivity.this.sendCallback);
                 BleDataForOnLineMovement.getBleDataForOutlineInstance().sendHRDataToDevice((byte) 1);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
