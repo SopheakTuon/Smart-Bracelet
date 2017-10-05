@@ -271,11 +271,11 @@ public class DeviceControlActivity extends Activity {
 
                         StringBuilder stringBuilder = new StringBuilder("");
                         stringBuilder.append("Heart Rate : ");
-                        stringBuilder.append(hrValue + "\n");
+                        stringBuilder.append(hrValue + " bpm" + "\n");
                         stringBuilder.append("Step : ");
-                        stringBuilder.append(stepValue + "\n");
+                        stringBuilder.append(stepValue + " steps" + "\n");
                         stringBuilder.append("Calories : ");
-                        stringBuilder.append(kcalValue);
+                        stringBuilder.append(kcalValue + " kcal");
 
                         textViewBattery.setText(stringBuilder.toString());
 
