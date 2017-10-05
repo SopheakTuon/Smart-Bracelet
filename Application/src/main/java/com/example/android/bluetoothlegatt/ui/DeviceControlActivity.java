@@ -615,7 +615,7 @@ public class DeviceControlActivity extends Activity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        BleDataForOnLineMovement.getBleDataForOutlineInstance().sendHRDataToDevice((byte) 2);
+//        BleDataForOnLineMovement.getBleDataForOutlineInstance().sendHRDataToDevice((byte) 2);
         mManager.realTimeAndOnceMeasure(10, 0);
         unbindService(mServiceConnection);
         mBluetoothLeService = null;
