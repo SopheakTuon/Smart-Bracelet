@@ -428,7 +428,7 @@ public class DeviceControlActivity extends Activity {
                                 stringBuilder.append("Calories : ");
                                 stringBuilder.append(calorie + " kcal" + "\n");
 
-                                stringBuilder.append("Miles : ");
+                                stringBuilder.append("Distance : ");
                                 stringBuilder.append(mileage + " m" + "\n");
                                 stringBuilder.append("Move Calories : ");
                                 stringBuilder.append(moveCalorie + " kcal");
