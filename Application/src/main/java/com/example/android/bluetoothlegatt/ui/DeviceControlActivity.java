@@ -50,13 +50,13 @@ import com.example.android.bluetoothlegatt.ble_service.BleGattHelper;
 import com.example.android.bluetoothlegatt.ble_service.BleGattHelperListener;
 import com.example.android.bluetoothlegatt.ble_service.BluetoothLeService;
 import com.example.android.bluetoothlegatt.ble_service.DataSendCallback;
+import com.example.android.bluetoothlegatt.ble_service.FormatUtils;
 import com.example.android.bluetoothlegatt.ble_service.LocalDataSaveTool;
 import com.example.android.bluetoothlegatt.ble_service.LocalDeviceEntity;
 import com.example.android.bluetoothlegatt.ble_service.OutLineDataEntity;
 import com.example.android.bluetoothlegatt.ble_service.util.DateUtils;
 import com.example.android.bluetoothlegatt.manager.CommandManager;
 import com.example.android.bluetoothlegatt.models.BroadcastData;
-import com.example.android.bluetoothlegatt.util.FormatUtils;
 import com.example.android.bluetoothlegatt.util.command.WriteCommand;
 
 import java.text.SimpleDateFormat;
