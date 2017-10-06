@@ -94,11 +94,19 @@ public class FormatUtils {
     }
 
     public static int byte2Int(byte[] b, int offset) {
-        int offset2 = offset + 1;
-        offset = offset2 + 1;
-        offset2 = offset + 1;
-        offset = offset2 + 1;
-        return (((b[offset] & 255) | ((b[offset2] & 255) << 8)) | ((b[offset] & 255) << 16)) | ((b[offset2] & 255) << 24);
+//        int offset2 = offset + 1;
+//        offset = offset2 + 1;
+//        offset2 = offset + 1;
+//        offset = offset2 + 1;
+//        return (((b[offset] & 255) | ((b[offset2] & 255) << 8)) | ((b[offset] & 255) << 16)) | ((b[offset2] & 255) << 24);
+
+        int MASK = 0xFF;
+        int result = 0;
+        result = b[offset] & MASK;
+        result = result + ((b[offset+1] & MASK) << 8);
+        result = result + ((b[offset+2] & MASK) << 16);
+        result = result + ((b[offset+3] & MASK) << 24);
+        return result;
     }
 
     public static byte[] int2Byte_HL(int a) {

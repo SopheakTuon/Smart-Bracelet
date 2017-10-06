@@ -424,7 +424,7 @@ public class DeviceControlActivity extends Activity {
 
                                 StringBuilder stringBuilder = new StringBuilder("");
                                 stringBuilder.append("Step : ");
-                                stringBuilder.append(stepAll + " steps" + "\n");
+                                stringBuilder.append(String.valueOf(stepAll) + " steps" + "\n");
                                 stringBuilder.append("Calories : ");
                                 stringBuilder.append(calorie + " kcal" + "\n");
                                 stringBuilder.append("Move Calories : ");
