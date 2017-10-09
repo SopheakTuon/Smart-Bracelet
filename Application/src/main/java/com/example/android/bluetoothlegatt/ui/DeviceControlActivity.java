@@ -234,7 +234,7 @@ public class DeviceControlActivity extends Activity {
                     DeviceControlActivity.this.isFirstData = true;
                 } else {
 //                    Movement_Fragment.this.endTime = (long) DateUtils.currentTimeSeconds();
-//                    Movement_Fragment.this.movementEndTime = Movement_Fragment.this.formateTime(Movement_Fragment.this.endTime);
+//                    Movement_Fragment.this.movementEndTime = Movement_Fragment.this.formatTime(Movement_Fragment.this.endTime);
 //                    Movement_Fragment.this.keepMovementTime = (Movement_Fragment.this.endTime - Movement_Fragment.this.beginTime) - Movement_Fragment.this.keepPauseTime;
 //                    Log.i("Movement_Fragment", "运动数据：beginTime:" + Movement_Fragment.this.beginTime + "\t\tendTime:" + Movement_Fragment.this.endTime + "\t\tkeepPauseTime:" + Movement_Fragment.this.keepMovementTime);
 //                    Log.i("Movement_Fragment", "运动数据：pauseBeginTime:" + Movement_Fragment.this.pauseBeginTime + "\t\tpauseEndTime:" + Movement_Fragment.this.pauseEndTime);
@@ -282,21 +282,11 @@ public class DeviceControlActivity extends Activity {
                         textViewBattery.setText(stringBuilder.toString());
 
                         if (DeviceControlActivity.this.isFirstData) {
-//                            StringBuilder stringBuilder = new StringBuilder("");
-//                            stringBuilder.append("Heart Rate : ");
-//                            stringBuilder.append(hrValue + "\n");
-//                            stringBuilder.append("Step : ");
-//                            stringBuilder.append(stepValue + "\n");
-//                            stringBuilder.append("Calories : ");
-//                            stringBuilder.append(kcalValue);
-//
-//                            textViewBattery.setText(stringBuilder.toString());
-
                             LocalDataSaveTool.getInstance(DeviceControlActivity.this).writeSp("movement_step", String.valueOf(stepValue));
                             LocalDataSaveTool.getInstance(DeviceControlActivity.this).writeSp("movement_kcal", String.valueOf(kcalValue));
                             LocalDataSaveTool.getInstance(DeviceControlActivity.this).writeSp("movement_hr", String.valueOf(hrValue));
                             DeviceControlActivity.this.beginTime = (long) DateUtils.currentTimeSeconds();
-                            DeviceControlActivity.this.movementBegginTime = DeviceControlActivity.this.formateTime(DeviceControlActivity.this.beginTime);
+                            DeviceControlActivity.this.movementBegginTime = DeviceControlActivity.this.formatTime(DeviceControlActivity.this.beginTime);
                             DeviceControlActivity.this.isFirstData = false;
                             DeviceControlActivity.this.isMovementing = true;
                             DeviceControlActivity.this.isPauseing = false;
@@ -356,7 +346,7 @@ public class DeviceControlActivity extends Activity {
         }
     }
 
-    private String formateTime(long beginTime) {
+    private String formatTime(long beginTime) {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(new Date(1000 * beginTime));
     }
 
