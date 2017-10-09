@@ -319,13 +319,15 @@ public class DeviceScanActivity extends ListActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-//                            if (device.getName() != null && device.getName().startsWith("Helo")) {
-                            if (device.getName() != null) {
+                            String deviceName = device.getName();
+                            if (deviceName == null || !deviceName.contains("_")) {
+                                if (device.getName() != null) {
+                                    mLeDeviceListAdapter.addDevice(device);
+                                }
+                            } else if (!deviceName.split("_")[0].equals("B7")) {
                                 mLeDeviceListAdapter.addDevice(device);
-                                mLeDeviceListAdapter.notifyDataSetChanged();
-//                                printScanRecord(scanRecord);
                             }
-//                            }
+                            mLeDeviceListAdapter.notifyDataSetChanged();
                         }
                     });
                 }

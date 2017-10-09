@@ -903,7 +903,7 @@ public class DeviceControlActivity extends Activity {
 
             public void sendFinished() {
 //                    if (ar == 0) {
-//                        MainActivity.this.mHandler.sendEmptyMessageDelayed(9, 0);
+//                       DeviceControlActivity.this.mHandler.sendEmptyMessageDelayed(9, 0);
 //                    }
             }
         });
