@@ -419,7 +419,13 @@ public class DeviceControlActivity extends Activity {
                                 stringBuilder.append("Distance : ");
                                 stringBuilder.append(mileage + " m" + "\n");
                                 stringBuilder.append("Move Calories : ");
-                                stringBuilder.append(moveCalorie + " kcal");
+                                stringBuilder.append(moveCalorie + " kcal" + "\n");
+                                stringBuilder.append("Movement Time : ");
+                                stringBuilder.append(movementTime + " mn" + "\n");
+                                stringBuilder.append("Sit Time : ");
+                                stringBuilder.append(sitTime + " mn" + "\n");
+                                stringBuilder.append("Sit Calories : ");
+                                stringBuilder.append(sitCalorie + " kcal");
 
                                 textViewBattery.setText(stringBuilder.toString());
                             }
