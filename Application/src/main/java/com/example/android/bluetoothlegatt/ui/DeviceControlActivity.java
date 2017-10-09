@@ -873,7 +873,7 @@ public class DeviceControlActivity extends Activity {
                     } else {
                         DeviceControlActivity.this.showResult = String.valueOf(liveHR);
                     }
-                    displayData("HR : " + showResult + " BPM");
+                    displayData(showResult + " BPM");
                 }
             });
         }
