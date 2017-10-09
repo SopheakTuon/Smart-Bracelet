@@ -393,55 +393,60 @@ public class DeviceControlActivity extends Activity {
 //                DeviceControlActivity.this.movementEntity = new OutLineDataEntity();
 //                BleDataForOnLineMovement.getBleDataForOutlineInstance().setOnSendRecever(DeviceControlActivity.this.sendCallback);
 //                BleDataForOnLineMovement.getBleDataForOutlineInstance().sendHRDataToDevice((byte) 1);
-                BleDataForDayData.getDayDataInstance(DeviceControlActivity.this.getApplicationContext()).setOnDayDataListener(new DataSendCallback() {
-                    public void sendSuccess(final byte[] bufferTmp) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+           DeviceControlActivity.this.mHandler.postDelayed(new Runnable() {
+               @Override
+               public void run() {
+                   BleDataForDayData.getDayDataInstance(DeviceControlActivity.this.getApplicationContext()).setOnDayDataListener(new DataSendCallback() {
+                       public void sendSuccess(final byte[] bufferTmp) {
+                           runOnUiThread(new Runnable() {
+                               @Override
+                               public void run() {
 //                                DayDataDealer dayDataDealer = new DayDataDealer(MainActivity.this, bufferTmp);
 //                        int day = bufferTmp[0];
 //                        int i = bufferTmp[2] + 2000;
 //                        String dataDate = formatTheDate(i, bufferTmp[1], day);
-                                int stepAll = FormatUtils.byte2Int(bufferTmp, 4);
-                                int calorie = FormatUtils.byte2Int(bufferTmp, 8);
-                                int mileage = FormatUtils.byte2Int(bufferTmp, 12);
-                                int movementTime = FormatUtils.byte2Int(bufferTmp, 16);
-                                int moveCalorie = FormatUtils.byte2Int(bufferTmp, 20);
-                                int sitTime = FormatUtils.byte2Int(bufferTmp, 24);
-                                int sitCalorie = FormatUtils.byte2Int(bufferTmp, 28);
+                                   int stepAll = FormatUtils.byte2Int(bufferTmp, 4);
+                                   int calorie = FormatUtils.byte2Int(bufferTmp, 8);
+                                   int mileage = FormatUtils.byte2Int(bufferTmp, 12);
+                                   int movementTime = FormatUtils.byte2Int(bufferTmp, 16);
+                                   int moveCalorie = FormatUtils.byte2Int(bufferTmp, 20);
+                                   int sitTime = FormatUtils.byte2Int(bufferTmp, 24);
+                                   int sitCalorie = FormatUtils.byte2Int(bufferTmp, 28);
 
-                                StringBuilder stringBuilder = new StringBuilder("");
-                                stringBuilder.append("Step : ");
-                                stringBuilder.append(String.valueOf(stepAll) + " steps" + "\n");
-                                stringBuilder.append("Calories : ");
-                                stringBuilder.append(calorie + " kcal" + "\n");
+                                   StringBuilder stringBuilder = new StringBuilder("");
+                                   stringBuilder.append("Step : ");
+                                   stringBuilder.append(String.valueOf(stepAll) + " steps" + "\n");
+                                   stringBuilder.append("Calories : ");
+                                   stringBuilder.append(calorie + " kcal" + "\n");
 
-                                stringBuilder.append("Distance : ");
-                                stringBuilder.append(mileage + " m" + "\n");
-                                stringBuilder.append("Move Calories : ");
-                                stringBuilder.append(moveCalorie + " kcal" + "\n");
-                                stringBuilder.append("Movement Time : ");
-                                stringBuilder.append(movementTime + " mn" + "\n");
-                                stringBuilder.append("Sit Time : ");
-                                stringBuilder.append(sitTime + " mn" + "\n");
-                                stringBuilder.append("Sit Calories : ");
-                                stringBuilder.append(sitCalorie + " kcal");
+                                   stringBuilder.append("Distance : ");
+                                   stringBuilder.append(mileage + " m" + "\n");
+                                   stringBuilder.append("Move Calories : ");
+                                   stringBuilder.append(moveCalorie + " kcal" + "\n");
+                                   stringBuilder.append("Movement Time : ");
+                                   stringBuilder.append(movementTime + " mn" + "\n");
+                                   stringBuilder.append("Sit Time : ");
+                                   stringBuilder.append(sitTime + " mn" + "\n");
+                                   stringBuilder.append("Sit Calories : ");
+                                   stringBuilder.append(sitCalorie + " kcal");
 
-                                textViewBattery.setText(stringBuilder.toString());
-                            }
-                        });
+                                   textViewBattery.setText(stringBuilder.toString());
+                               }
+                           });
 //
-                    }
+                       }
 
-                    public void sendFailed() {
+                       public void sendFailed() {
 
-                    }
+                       }
 
-                    public void sendFinished() {
+                       public void sendFinished() {
 
-                    }
-                });
-                BleDataForDayData.getDayDataInstance(DeviceControlActivity.this.getApplicationContext()).getDayData();
+                       }
+                   });
+                   BleDataForDayData.getDayDataInstance(DeviceControlActivity.this.getApplicationContext()).getDayData();
+               }
+           }, 300);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA) + " BPM");
             }
