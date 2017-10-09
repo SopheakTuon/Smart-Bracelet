@@ -528,6 +528,7 @@ public class DeviceControlActivity extends Activity {
         mGattServicesList.setAdapter((SimpleExpandableListAdapter) null);
         mDataField.setText(R.string.no_data);
         mByteData.setText(R.string.no_data);
+        textViewBattery.setText(R.string.no_data);
     }
 
     @Override
