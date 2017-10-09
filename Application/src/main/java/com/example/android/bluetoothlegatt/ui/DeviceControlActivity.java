@@ -46,7 +46,6 @@ import com.example.android.bluetoothlegatt.SampleGattAttributes;
 import com.example.android.bluetoothlegatt.ble_service.BleDataForBattery;
 import com.example.android.bluetoothlegatt.ble_service.BleDataForDayData;
 import com.example.android.bluetoothlegatt.ble_service.BleDataForOnLineMovement;
-import com.example.android.bluetoothlegatt.ble_service.BleDataforSyn;
 import com.example.android.bluetoothlegatt.ble_service.BleGattHelper;
 import com.example.android.bluetoothlegatt.ble_service.BleGattHelperListener;
 import com.example.android.bluetoothlegatt.ble_service.BluetoothLeService;
@@ -106,7 +105,7 @@ public class DeviceControlActivity extends Activity {
     private Handler mHandler = new GetDataHandler();
     private String showResult;
 
-    DataSendCallback sendCallback = new C17047();
+    DataSendCallback sendCallback = new MovementSendCallBack();
     private boolean isFirstData;
     private boolean isMovementing;
     private boolean isPauseing;
@@ -256,21 +255,20 @@ public class DeviceControlActivity extends Activity {
     }
 
 
-    class C17047 implements DataSendCallback {
-        C17047() {
+    class MovementSendCallBack implements DataSendCallback {
+        MovementSendCallBack() {
         }
 
-        public void sendSuccess(final byte[] receveData) {
+        public void sendSuccess(final byte[] receivedData) {
             runOnUiThread(new Runnable() {
                 public void run() {
-                    if (receveData[0] == (byte) 0) {
-                        int hrValue = receveData[1] & 255;
-                        int stepValue = FormatUtils.byte2Int(receveData, 2);
-                        int mileValue = FormatUtils.byte2Int(receveData, 6);
-                        int kcalValue = FormatUtils.byte2Int(receveData, 10);
-                        int paceValue = receveData[14] & 255;
+                    if (receivedData[0] == (byte) 0) {
+                        int hrValue = receivedData[1] & 255;
+                        int stepValue = FormatUtils.byte2Int(receivedData, 2);
+                        int mileValue = FormatUtils.byte2Int(receivedData, 6);
+                        int kcalValue = FormatUtils.byte2Int(receivedData, 10);
+                        int paceValue = receivedData[14] & 255;
                         Log.d("Value", hrValue + " " + stepValue + " " + kcalValue + " " + mileValue + " " + paceValue);
-
                         StringBuilder stringBuilder = new StringBuilder("");
                         stringBuilder.append("Heart Rate : ");
                         stringBuilder.append(hrValue + " bpm" + "\n");
@@ -310,7 +308,7 @@ public class DeviceControlActivity extends Activity {
 //                            if (moveHr == null || moveHr.equals("") || moveHr.equals("null")) {
 //                                hr = FormatUtils.byteToHexStringUn0X((byte) 0);
 //                            } else {
-//                                hr = FormatUtils.byteToHexStringUn0X(receveData[1]);
+//                                hr = FormatUtils.byteToHexStringUn0X(receiveData[1]);
 //                            }
 //                            DeviceControlActivity.this.movementEntity.setHeartReat(DeviceControlActivity.this.movementEntity.getHeartReat() + hr);
 //                            Log.i("Movement_Fragment", "movement::hr:" + DeviceControlActivity.this.movementEntity.getHeartReat() + hr);
@@ -329,7 +327,7 @@ public class DeviceControlActivity extends Activity {
 //                        stringBuilder1.append(moveKcal);
 //
 //                        textViewBattery.setText(stringBuilder1.toString());
-                    } else if (receveData[0] == (byte) 1) {
+                    } else if (receivedData[0] == (byte) 1) {
                         Message mzg = DeviceControlActivity.this.movementHandler.obtainMessage();
                         mzg.what = 0;
                         mzg.arg1 = 6;
@@ -446,29 +444,6 @@ public class DeviceControlActivity extends Activity {
 
     };
 
-    private void synchronizeTime() {
-        Log.i(TAG, "执行synTime");
-        BleDataforSyn syn = BleDataforSyn.getSynInstance();
-        syn.setDataSendCallback(new C16889());
-        syn.syncCurrentTime();
-    }
-
-    class C16889 implements DataSendCallback {
-        C16889() {
-        }
-
-        public void sendSuccess(byte[] receveData) {
-        }
-
-        public void sendFailed() {
-        }
-
-        public void sendFinished() {
-//            DeviceControlActivity.this.mHandler.sendEmptyMessageDelayed(11, 0);
-
-        }
-    }
-
     private void displayByteDate(BroadcastData broadcastData) {
         mByteData.setText(bytesToByteString(broadcastData.getReceives()));
     }
@@ -478,11 +453,11 @@ public class DeviceControlActivity extends Activity {
     }
 
     private String bytesToByteString(byte[] bytes) {
-        String btyesString = "";
+        String bytesString = "";
         for (int i = 0; i < bytes.length; i++) {
-            btyesString += " " + bytes[i];
+            bytesString += " " + bytes[i];
         }
-        return btyesString;
+        return bytesString;
     }
 
 
