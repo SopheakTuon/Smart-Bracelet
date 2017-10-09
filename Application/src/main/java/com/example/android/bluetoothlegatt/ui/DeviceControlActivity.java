@@ -637,13 +637,8 @@ public class DeviceControlActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        try {
-            unBindDevice();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 //        BleDataForOnLineMovement.getBleDataForOutlineInstance().sendHRDataToDevice((byte) 2);
-        mManager.realTimeAndOnceMeasure(10, 0);
+//        mManager.realTimeAndOnceMeasure(10, 0);
         unbindService(mServiceConnection);
         mBluetoothLeService = null;
     }
