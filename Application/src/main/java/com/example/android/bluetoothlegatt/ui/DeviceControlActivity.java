@@ -271,11 +271,11 @@ public class DeviceControlActivity extends Activity {
                         Log.d("Value", hrValue + " " + stepValue + " " + kcalValue + " " + mileValue + " " + paceValue);
                         StringBuilder stringBuilder = new StringBuilder("");
                         stringBuilder.append("Heart Rate : ");
-                        stringBuilder.append(hrValue + " bpm" + "\n");
+                        stringBuilder.append((hrValue > 0 ? hrValue : 0) + " bpm" + "\n");
                         stringBuilder.append("Step : ");
-                        stringBuilder.append(stepValue + " steps" + "\n");
+                        stringBuilder.append((stepValue > 0 ? stepValue : 0) + " steps" + "\n");
                         stringBuilder.append("Calories : ");
-                        stringBuilder.append(kcalValue + " kcal");
+                        stringBuilder.append((kcalValue>0? kcalValue:0) + " kcal");
 
                         textViewBattery.setText(stringBuilder.toString());
 
@@ -388,20 +388,20 @@ public class DeviceControlActivity extends Activity {
 
                     StringBuilder stringBuilder = new StringBuilder("");
                     stringBuilder.append("Step : ");
-                    stringBuilder.append(String.valueOf(stepAll) + " steps" + "\n");
+                    stringBuilder.append((stepAll > 0 ? stepAll : 0) + " steps" + "\n");
                     stringBuilder.append("Calories : ");
-                    stringBuilder.append(calorie + " kcal" + "\n");
+                    stringBuilder.append((calorie > 0 ? calorie : 0) + " kcal" + "\n");
 
                     stringBuilder.append("Distance : ");
-                    stringBuilder.append(mileage + " m" + "\n");
+                    stringBuilder.append((mileage > 0 ? mileage : 0) + " m" + "\n");
                     stringBuilder.append("Move Calories : ");
-                    stringBuilder.append(moveCalorie + " kcal" + "\n");
+                    stringBuilder.append((moveCalorie > 0 ? moveCalorie : 0) + " kcal" + "\n");
                     stringBuilder.append("Movement Time : ");
-                    stringBuilder.append(movementTime + " mn" + "\n");
+                    stringBuilder.append((movementTime > 0 ? movementTime : 0) + " mn" + "\n");
                     stringBuilder.append("Sit Time : ");
-                    stringBuilder.append(sitTime + " mn" + "\n");
+                    stringBuilder.append((sitTime > 0 ? sitTime : 0) + " mn" + "\n");
                     stringBuilder.append("Sit Calories : ");
-                    stringBuilder.append(sitCalorie + " kcal");
+                    stringBuilder.append((sitCalorie > 0 ? sitCalorie : 0) + " kcal");
 
                     textViewBattery.setText(stringBuilder.toString());
                 }
