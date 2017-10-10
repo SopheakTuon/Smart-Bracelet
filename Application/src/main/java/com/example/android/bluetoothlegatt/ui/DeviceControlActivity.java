@@ -78,7 +78,7 @@ public class DeviceControlActivity extends Activity {
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
 
     private TextView mConnectionState;
-    private TextView mDataField, tvTimer, mByteData, textViewBattery;
+    private TextView mDataField, tvTimer, mByteData, textViewBattery, textViewDataForDayData;
     private String mDeviceName;
     private String mDeviceAddress;
     private ExpandableListView mGattServicesList;
@@ -116,6 +116,16 @@ public class DeviceControlActivity extends Activity {
         }
 
         public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 0:
+                    switch (msg.arg1){
+                        case 1:
+                            BleDataForDayData.getDayDataInstance(DeviceControlActivity.this.getApplicationContext()).setOnDayDataListener(dataForDayListener);
+                            BleDataForDayData.getDayDataInstance(DeviceControlActivity.this.getApplicationContext()).getDayData();
+                            break;
+                    }
+                    break;
+            }
         }
     }
 
@@ -245,6 +255,10 @@ public class DeviceControlActivity extends Activity {
         }
 
         public void sendFinished() {
+            Message message = DeviceControlActivity.this.mHandler.obtainMessage();
+            message.what=0;
+            message.arg1 =1;
+            mHandler.sendMessageDelayed(message, 300);
         }
     }
 
@@ -307,7 +321,7 @@ public class DeviceControlActivity extends Activity {
                     stringBuilder.append("Sit Calories : ");
                     stringBuilder.append((sitCalorie > 0 ? sitCalorie : 0) + " kcal");
 
-                    textViewBattery.setText(stringBuilder.toString());
+                    textViewDataForDayData.setText(stringBuilder.toString());
                 }
             });
 //
@@ -435,6 +449,7 @@ public class DeviceControlActivity extends Activity {
         mConnectionState = (TextView) findViewById(R.id.connection_state);
         mDataField = (TextView) findViewById(R.id.data_value);
         textViewBattery = (TextView) findViewById(R.id.textViewBattery);
+        textViewDataForDayData = (TextView) findViewById(R.id.textViewDataForDayData);
         mByteData = (TextView) findViewById(R.id.byte_data_value);
         tvTimer = (TextView) findViewById(R.id.tvTimer);
 
