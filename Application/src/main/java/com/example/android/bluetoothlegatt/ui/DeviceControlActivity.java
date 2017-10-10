@@ -174,8 +174,12 @@ public class DeviceControlActivity extends Activity {
                         stringBuilder.append((hrValue > 0 ? hrValue : 0) + " bpm" + "\n");
                         stringBuilder.append("Step : ");
                         stringBuilder.append((stepValue > 0 ? stepValue : 0) + " steps" + "\n");
+                        stringBuilder.append("Distance : ");
+                        stringBuilder.append((mileValue > 0 ? mileValue : 0) + " m" + "\n");
                         stringBuilder.append("Calories : ");
-                        stringBuilder.append((kcalValue > 0 ? kcalValue : 0) + " kcal");
+                        stringBuilder.append((kcalValue > 0 ? kcalValue : 0) + " kcal" + "\n");
+                        stringBuilder.append("Pace : ");
+                        stringBuilder.append((paceValue > 0 ? paceValue : 0) + " kcal");
 
                         textViewBattery.setText(stringBuilder.toString());
 
@@ -338,9 +342,14 @@ public class DeviceControlActivity extends Activity {
 //                getAndShowBattary(null);
 
 //                DeviceControlActivity.this.movementEntity = new OutLineDataEntity();
-//                BleDataForOnLineMovement.getBleDataForOutlineInstance().setOnSendRecever(DeviceControlActivity.this.sendCallback);
-//                BleDataForOnLineMovement.getBleDataForOutlineInstance().sendHRDataToDevice((byte) 1);
-                DeviceControlActivity.this.mHandler.postDelayed(new DataForDayData(), 300);
+                BleDataForOnLineMovement.getBleDataForOutlineInstance().setOnSendRecever(DeviceControlActivity.this.sendCallback);
+                DeviceControlActivity.this.mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        BleDataForOnLineMovement.getBleDataForOutlineInstance().sendHRDataToDevice((byte) 1);
+                    }
+                }, 1000);
+//                DeviceControlActivity.this.mHandler.postDelayed(new DataForDayData(), 300);
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA) + " BPM");
             }
@@ -349,7 +358,7 @@ public class DeviceControlActivity extends Activity {
 
     };
 
-    class DataForDayData implements Runnable{
+    class DataForDayData implements Runnable {
 
         @Override
         public void run() {
@@ -516,7 +525,7 @@ public class DeviceControlActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        BleDataForOnLineMovement.getBleDataForOutlineInstance().sendHRDataToDevice((byte) 2);
+        BleDataForOnLineMovement.getBleDataForOutlineInstance().sendHRDataToDevice((byte) 2);
 //        mManager.realTimeAndOnceMeasure(10, 0);
         unbindService(mServiceConnection);
         mBluetoothLeService = null;
